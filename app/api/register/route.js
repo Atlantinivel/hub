@@ -10,8 +10,7 @@ export async function POST(request, response) {
     const user = await prisma.user.create({
       data,
     });
-
-
+    
     return NextResponse.json(user);
   } catch (error) {
     console.log(error);
