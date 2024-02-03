@@ -1,0 +1,151 @@
+[
+    {
+      "id": 1,
+      "value": "Administrador"
+    },
+    {
+      "id": 2,
+      "value": "Aprendiz"
+    },
+    {
+      "id": 3,
+      "value": "Arquiteto"
+    },
+    {
+      "id": 4,
+      "value": "Chefe de Equipa"
+    },
+    {
+      "id": 5,
+      "value": "Diretor Comercial"
+    },
+    {
+      "id": 6,
+      "value": "Diretor de Obra"
+    },
+    {
+      "id": 7,
+      "value": "Diretor de Produção"
+    },
+    {
+      "id": 8,
+      "value": "Diretor de Projeto"
+    },
+    {
+      "id": 9,
+      "value": "Encarregado"
+    },
+    {
+      "id": 10,
+      "value": "Encarregado Geral"
+    },
+    {
+      "id": 11,
+      "value": "Engenheiro Civil"
+    },
+    {
+      "id": 12,
+      "value": "Engenheiro Eletrotécnico"
+    },
+    {
+      "id": 13,
+      "value": "Engenheiro Mecânico"
+    },
+    {
+      "id": 14,
+      "value": "Gruista"
+    },
+    {
+      "id": 15,
+      "value": "Manobrador de Máquinas"
+    },
+    {
+      "id": 16,
+      "value": "Mecânico"
+    },
+    {
+      "id": 17,
+      "value": "Motorista de Pesados"
+    },
+    {
+      "id": 18,
+      "value": "Orçamentista"
+    },
+    {
+      "id": 19,
+      "value": "Pedreiro"
+    },
+    {
+      "id": 20,
+      "value": "Porteiro"
+    },
+    {
+      "id": 21,
+      "value": "Preparador de Obra"
+    },
+    {
+      "id": 22,
+      "value": "Prospetor de Vendas"
+    },
+    {
+      "id": 23,
+      "value": "Responsável de Recursos Humanos"
+    },
+    {
+      "id": 24,
+      "value": "Responsável Dpto. Compras"
+    },
+    {
+      "id": 25,
+      "value": "Responsável Dpto. Financeiro"
+    },
+    {
+      "id": 26,
+      "value": "Responsável Dpto. Orçamentação"
+    },
+    {
+      "id": 27,
+      "value": "Responsável Dpto. Segurança"
+    },
+    {
+      "id": 28,
+      "value": "Serralheiro"
+    },
+    {
+      "id": 29,
+      "value": "Servente"
+    },
+    {
+      "id": 30,
+      "value": "Soldador"
+    },
+    {
+      "id": 31,
+      "value": "Técnico Administrativo"
+    },
+    {
+      "id": 32,
+      "value": "Técnico de Compras"
+    },
+    {
+      "id": 33,
+      "value": "Técnico de Obra"
+    },
+    {
+      "id": 34,
+      "value": "Técnico de Segurança"
+    },
+    {
+      "id": 35,
+      "value": "Técnico Informático"
+    },
+    {
+      "id": 36,
+      "value": "Topógrafo"
+    },
+    {
+      "id": 37,
+      "value": "Trolha"
+    }
+  ]
+  

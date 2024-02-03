@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "value": "Departamento Financeiro"
+  },
+  {
+    "id": 2,
+    "value": "Departamento Recursos Humanos"
+  },
+  {
+    "id": 3,
+    "value": "Departamento Compras"
+  },
+  {
+    "id": 4,
+    "value": "Departamento Orçamentação"
+  },
+  {
+    "id": 5,
+    "value": "Departamento Comercial"
+  },
+  {
+    "id": 6,
+    "value": "Departamento Internacional"
+  },
+  {
+    "id": 7,
+    "value": "Departamento Produção"
+  },
+  {
+    "id": 8,
+    "value": "Departamento Administrativo"
+  },
+  {
+    "id": 9,
+    "value": "Departamento Segurança"
+  },
+  {
+    "id": 10,
+    "value": "Departamento Informática"
+  },
+  {
+    "id": 11,
+    "value": "Serralharia"
+  },
+  {
+    "id": 12,
+    "value": "Armazém"
+  }
+]
