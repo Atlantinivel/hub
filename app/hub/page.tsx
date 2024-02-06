@@ -1,15 +1,14 @@
-
+import { Calendar, Users } from "lucide-react";
 import Link from "next/link";
+
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-
-import { Calendar, Users } from 'lucide-react';
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/card";
 
 export default function Tets() {
   return (
@@ -17,7 +16,10 @@ export default function Tets() {
       <Card className=" min-w-[200px]">
         <CardHeader>
           <CardTitle className=" pb-4">Calendário</CardTitle>
-          <CardDescription> <Calendar className="h-[4.2rem] w-[4.2rem] stroke-black  dark:stroke-white m-auto"></Calendar></CardDescription>
+          <CardDescription>
+            {" "}
+            <Calendar className="h-[4.2rem] w-[4.2rem] stroke-black  dark:stroke-white m-auto"></Calendar>
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Button asChild>
@@ -28,7 +30,9 @@ export default function Tets() {
       <Card className=" min-w-[200px]">
         <CardHeader>
           <CardTitle className=" pb-4">Funcionários</CardTitle>
-          <CardDescription><Users className="h-[4.2rem] w-[4.2rem] stroke-black  dark:stroke-white  m-auto"></Users></CardDescription>
+          <CardDescription>
+            <Users className="h-[4.2rem] w-[4.2rem] stroke-black  dark:stroke-white  m-auto"></Users>
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Button asChild>
@@ -36,7 +40,6 @@ export default function Tets() {
           </Button>
         </CardContent>
       </Card>
-
     </div>
-  )
+  );
 }
