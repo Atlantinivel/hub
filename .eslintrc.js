@@ -1,4 +1,4 @@
-{
+module.exports = {
   "extends": [
     "next/core-web-vitals",
     "prettier",
@@ -12,6 +12,7 @@
     "prettier/prettier": [
       "error"
     ],
+    "no-unused-vars": "off",
     "import/order": [
       "error",
       {
