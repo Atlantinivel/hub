@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from '@tanstack/react-table';
 
-import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown } from 'lucide-react';
 
-import Link from "next/link";
+import Link from 'next/link';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,10 +14,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 
-import departments from "@/static-data/departments.json";
-import jobs from "@/static-data/jobs.json";
+import departments from '@/static-data/departments.json';
+import jobs from '@/static-data/jobs.json';
 
 export type User = {
   id: String;
@@ -48,12 +48,12 @@ export type User = {
 
 export const columns: ColumnDef<User>[] = [
   {
-    accessorKey: "name",
+    accessorKey: 'name',
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Nome
           <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -62,48 +62,48 @@ export const columns: ColumnDef<User>[] = [
     },
   },
   {
-    accessorKey: "employeeNumber",
-    header: "Numero",
+    accessorKey: 'employeeNumber',
+    header: 'Numero',
     cell: ({ row }) => {
       return (
-        <div className="font-medium">{row.getValue("employeeNumber")}</div>
+        <div className="font-medium">{row.getValue('employeeNumber')}</div>
       );
     },
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: 'email',
+    header: 'Email',
   },
   {
-    accessorKey: "department",
-    header: "Departamento",
+    accessorKey: 'department',
+    header: 'Departamento',
     cell: ({ row }) => {
       const item = departments.find(
-        (el) => el.id == row.getValue("department"),
+        (el) => el.id == row.getValue('department'),
       );
 
       return <div className="font-medium">{item?.value}</div>;
     },
   },
   {
-    accessorKey: "job",
-    header: "Função",
+    accessorKey: 'job',
+    header: 'Função',
     cell: ({ row }) => {
-      const item = jobs.find((el) => el.id == row.getValue("job"));
+      const item = jobs.find((el) => el.id == row.getValue('job'));
 
       return <div className="font-medium">{item?.value}</div>;
     },
   },
 
   {
-    accessorKey: "companyCode",
-    header: "Obra",
+    accessorKey: 'companyCode',
+    header: 'Obra',
     cell: ({ row }) => {
-      return <div className="font-medium">{row.getValue("companyCode")}</div>;
+      return <div className="font-medium">{row.getValue('companyCode')}</div>;
     },
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => {
       const user = row.original;
 

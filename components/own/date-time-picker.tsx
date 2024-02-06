@@ -1,19 +1,19 @@
-import { Calendar as CalendarIcon } from "lucide-react";
-import { DateTime } from "luxon";
-import * as React from "react";
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { DateTime } from 'luxon';
+import * as React from 'react';
 
-import { SelectSingleEventHandler } from "react-day-picker";
+import { SelectSingleEventHandler } from 'react-day-picker';
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
 
 interface DateTimePickerProps {
   date: Date;
@@ -39,8 +39,8 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
 
   const handleTimeChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const { value } = e.target;
-    const hours = Number.parseInt(value.split(":")[0] || "00", 10);
-    const minutes = Number.parseInt(value.split(":")[1] || "00", 10);
+    const hours = Number.parseInt(value.split(':')[0] || '00', 10);
+    const minutes = Number.parseInt(value.split(':')[1] || '00', 10);
     const modifiedDay = selectedDateTime.set({ hour: hours, minute: minutes });
 
     setSelectedDateTime(modifiedDay);
@@ -54,7 +54,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
         <Input
           type="time"
           onChange={handleTimeChange}
-          value={selectedDateTime.toFormat("HH:mm")}
+          value={selectedDateTime.toFormat('HH:mm')}
         />
       </div>
       {!selectedDateTime && <p>Please pick a day.</p>}
@@ -65,15 +65,15 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
     <Popover>
       <PopoverTrigger asChild className="z-10">
         <Button
-          variant={"outline"}
+          variant={'outline'}
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
-            !date && "text-muted-foreground",
+            'w-[280px] justify-start text-left font-normal',
+            !date && 'text-muted-foreground',
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {date ? (
-            selectedDateTime.toFormat("DDD HH:mm")
+            selectedDateTime.toFormat('DDD HH:mm')
           ) : (
             <span>Pick a date</span>
           )}

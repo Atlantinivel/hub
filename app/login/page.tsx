@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,17 +15,17 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
-import atlantinivelLogo from "@/public/atlantinivel-logo-blue.svg";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/use-toast';
+import atlantinivelLogo from '@/public/atlantinivel-logo-blue.svg';
 
 const FormSchema = z.object({
   email: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: 'Username must be at least 2 characters.',
   }),
   password: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+    message: 'Username must be at least 2 characters.',
   }),
 });
 
@@ -34,15 +34,15 @@ const Login = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     const { email, password } = data;
 
-    if (password === "" || email === "") {
+    if (password === '' || email === '') {
       // toast({
       //   title: 'Fill all fields!',
       //   description: (
@@ -52,7 +52,7 @@ const Login = () => {
       //   ),
       // });
       toast({
-        title: "You submitted the following values:",
+        title: 'You submitted the following values:',
         description: (
           <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
             <code className="text-white">{JSON.stringify(data, null, 2)}</code>
@@ -64,13 +64,13 @@ const Login = () => {
 
     if (password.length < 6) {
       toast({
-        title: "Password must be at least 6 characters long",
+        title: 'Password must be at least 6 characters long',
       });
       return;
     }
 
     try {
-      const res = await signIn("credentials", {
+      const res = await signIn('credentials', {
         email,
         password,
         redirect: false,
@@ -79,13 +79,13 @@ const Login = () => {
       console.log(res);
 
       if (res?.error == null) {
-        router.push("/hub");
+        router.push('/hub');
         toast({
-          title: "Success",
+          title: 'Success',
         });
       } else {
         return toast({
-          title: "Error occurred while logging in2",
+          title: 'Error occurred while logging in2',
         });
       }
     } catch (error) {

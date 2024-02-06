@@ -1,5 +1,5 @@
-import { DataTable } from "@/components/own/table";
-import { User, columns } from "@/components/own/user-table/columns";
+import { DataTable } from '@/components/own/table';
+import { User, columns } from '@/components/own/user-table/columns';
 
 async function getUsers(): Promise<User[]> {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/users`);

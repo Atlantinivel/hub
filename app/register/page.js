@@ -1,20 +1,20 @@
-"use client";
-import axios from "axios"; // Import Axios
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+'use client';
+import axios from 'axios'; // Import Axios
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 const Register = () => {
   const router = useRouter();
   const [data, setData] = useState({
-    name: "",
-    email: "",
-    password: "",
+    name: '',
+    email: '',
+    password: '',
   });
 
   const registerUser = async (e) => {
     e.preventDefault();
 
-    console.log("User:", {
+    console.log('User:', {
       name: data.name,
       email: data.email,
       password: data.password,
@@ -22,7 +22,7 @@ const Register = () => {
 
     try {
       const response = await axios.post(
-        "/api/register",
+        '/api/register',
         {
           name: data.name,
           email: data.email,
@@ -30,16 +30,16 @@ const Register = () => {
         },
         {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         },
       );
 
       const user = response.data;
       console.log(user);
-      router.push("/login");
+      router.push('/login');
     } catch (error) {
-      console.error("Error registering user:", error);
+      console.error('Error registering user:', error);
     }
   };
   return (

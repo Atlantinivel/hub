@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
-import { revalidatePath } from "next/cache";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import axios from 'axios';
+import { revalidatePath } from 'next/cache';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -16,57 +16,57 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
-import { toast } from "@/components/ui/use-toast";
-import departments from "@/static-data/departments.json";
-import jobs from "@/static-data/jobs.json";
+import { toast } from '@/components/ui/use-toast';
+import departments from '@/static-data/departments.json';
+import jobs from '@/static-data/jobs.json';
 
 const items = [
   {
-    id: "1",
-    label: "Calendário",
+    id: '1',
+    label: 'Calendário',
   },
   {
-    id: "2",
-    label: "Funcionários",
+    id: '2',
+    label: 'Funcionários',
   },
 ] as const;
 
 const profileFormSchema = z.object({
   name: z.string().min(2, {
-    message: "Este campo é obrigatório",
+    message: 'Este campo é obrigatório',
   }),
   fullName: z.string().min(2, {
-    message: "Este campo é obrigatório",
+    message: 'Este campo é obrigatório',
   }),
   email: z
     .string({
-      required_error: "Este campo é obrigatório",
+      required_error: 'Este campo é obrigatório',
     })
     .email(),
   employeeNumber: z.string({
-    required_error: "Este campo é obrigatório",
+    required_error: 'Este campo é obrigatório',
   }),
   personalPhoneNumber: z.string({
-    required_error: "Este campo é obrigatório",
+    required_error: 'Este campo é obrigatório',
   }),
   companyPhoneNumber: z.string({
-    required_error: "Este campo é obrigatório",
+    required_error: 'Este campo é obrigatório',
   }),
   companyCode: z.string({
-    required_error: "Este campo é obrigatório",
+    required_error: 'Este campo é obrigatório',
   }),
   gender: z.string({
-    required_error: "Este campo é obrigatório",
+    required_error: 'Este campo é obrigatório',
   }),
   department: z.string(),
   job: z.string(),
@@ -75,7 +75,7 @@ const profileFormSchema = z.object({
   //     required_error: "Este campo é obrigatório",
   //   }),
   roles: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: "You have to select at least one item.",
+    message: 'You have to select at least one item.',
   }),
 });
 
@@ -90,7 +90,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: id ? values : defaultValues,
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -98,7 +98,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
       if (isEdit) {
         const response = await axios.post(`/api/users/user/${id[0]}`, data, {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
 
@@ -106,13 +106,13 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
         console.log(user);
 
         toast({
-          title: "Funcionário atualizado.",
+          title: 'Funcionário atualizado.',
         });
         revalidatePath(`api/users/user/${id[0]}`);
       } else {
-        const response = await axios.post("/api/register", data, {
+        const response = await axios.post('/api/register', data, {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
 
@@ -120,18 +120,18 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
 
         console.log(user);
         toast({
-          title: "Funcionário criado.",
+          title: 'Funcionário criado.',
         });
         revalidatePath(`api/users/user/${id[0]}`);
       }
     } catch (error) {
       toast({
-        title: "Algo correu mal.",
+        title: 'Algo correu mal.',
       });
     }
 
     toast({
-      title: "Funcionário atualizado",
+      title: 'Funcionário atualizado',
     });
   };
 
@@ -139,7 +139,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
     <Form {...form}>
       <div className="container py-3">
         <h1 className="mb-6 text-3xl font-bold">
-          {isEdit ? "Editar funcionário" : "Adicionar funcionário"}
+          {isEdit ? 'Editar funcionário' : 'Adicionar funcionário'}
         </h1>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
           <FormField

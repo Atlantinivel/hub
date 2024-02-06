@@ -1,17 +1,17 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-import Link from "next/link";
+import Link from 'next/link';
 
-import atlantinivelLogo from "@/public/atlantinivel-logo-blue.svg";
+import atlantinivelLogo from '@/public/atlantinivel-logo-blue.svg';
 
-import { ModeToggle } from "./dark-toggle";
-import { UserNav } from "./user-nav";
+import { ModeToggle } from './dark-toggle';
+import { UserNav } from './user-nav';
 
 export function Nav() {
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
-        <Link href={"/hub"} className=" pr-2">
+        <Link href={'/hub'} className=" pr-2">
           <Image
             src={atlantinivelLogo}
             alt="Hub link"

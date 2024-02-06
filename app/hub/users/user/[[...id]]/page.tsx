@@ -1,6 +1,6 @@
-import { User } from "@/components/own/user-table/columns";
+import { User } from '@/components/own/user-table/columns';
 
-import UserForm from "./user-form";
+import UserForm from './user-form';
 
 async function getUser(id: string): Promise<User[] | undefined> {
   const { signal } = new AbortController();

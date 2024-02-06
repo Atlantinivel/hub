@@ -10,7 +10,8 @@ module.exports = {
   ],
   "rules": {
     "prettier/prettier": [
-      "error"
+      "error",
+      { endOfLine: "auto" }
     ],
     "no-unused-vars": "off",
     "import/order": [

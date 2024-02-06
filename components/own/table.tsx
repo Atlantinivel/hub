@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   ColumnDef,
@@ -11,17 +11,17 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { useState } from "react";
+} from '@tanstack/react-table';
+import { useState } from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
 import {
   Table,
   TableBody,
@@ -29,10 +29,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 
-import departments from "@/static-data/departments.json";
-import jobs from "@/static-data/jobs.json";
+import departments from '@/static-data/departments.json';
+import jobs from '@/static-data/jobs.json';
 
 import {
   Select,
@@ -40,7 +40,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
+} from '../ui/select';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [job, setJob] = useState<string>();
   const [department, setDepartment] = useState<string>();
-  const [filtering, setFiltering] = useState("");
+  const [filtering, setFiltering] = useState('');
 
   const table = useReactTable({
     data,
@@ -105,9 +105,9 @@ export function DataTable<TData, TValue>({
           <Select
             onValueChange={(o) => {
               setDepartment(o);
-              table.getColumn("department")?.setFilterValue(o);
+              table.getColumn('department')?.setFilterValue(o);
             }}
-            value={department || ""}
+            value={department || ''}
           >
             <SelectTrigger>
               <SelectValue placeholder="Departamento" />
@@ -123,9 +123,9 @@ export function DataTable<TData, TValue>({
           <Select
             onValueChange={(o) => {
               setJob(o);
-              table.getColumn("job")?.setFilterValue(o);
+              table.getColumn('job')?.setFilterValue(o);
             }}
-            value={job || ""}
+            value={job || ''}
           >
             <SelectTrigger>
               <SelectValue placeholder="Função" />
@@ -140,9 +140,9 @@ export function DataTable<TData, TValue>({
           </Select>
           <Button
             onClick={() => {
-              setDepartment("");
-              setJob("");
-              setFiltering("");
+              setDepartment('');
+              setJob('');
+              setFiltering('');
               table.resetColumnFilters();
             }}
             variant="outline"
@@ -207,7 +207,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

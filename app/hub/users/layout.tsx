@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react';
 
-import { SideMenu } from "@/components/own/side-menu/side-menu";
-import { Separator } from "@/components/ui/separator";
+import { SideMenu } from '@/components/own/side-menu/side-menu';
+import { Separator } from '@/components/ui/separator';
 
 const sidebarNavItems = [
   {
-    title: "Lista",
-    href: "/hub/users",
+    title: 'Lista',
+    href: '/hub/users',
   },
   {
-    title: "Adicionar",
-    href: "/hub/users/user",
+    title: 'Adicionar',
+    href: '/hub/users/user',
   },
   // {
   //   title: "Renovações",

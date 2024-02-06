@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-import prisma from "@/../../libs/prismadb";
+import prisma from '@/../../libs/prismadb';
 
 export async function GET(request, { params }) {
   try {
     const { id } = params;
 
-    console.log("request", id, request);
+    console.log('request', id, request);
 
     const user = await prisma.user.findFirst({
       where: {

@@ -1,10 +1,10 @@
-import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import React from "react";
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
+import React from 'react';
 
-import { Nav } from "@/components/own/nav";
+import { Nav } from '@/components/own/nav';
 
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { config } from '../api/auth/[...nextauth]/route';
 
 export default async function HubLayout({
   children,
@@ -12,12 +12,12 @@ export default async function HubLayout({
   children: React.ReactNode;
 }) {
   // @ts-ignore
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(config);
 
   const isAuthenticated = !!session;
 
   if (!isAuthenticated) {
-    redirect("/login");
+    redirect('/login');
   }
   return (
     <div className=" max-h-screen h-full">

@@ -1,14 +1,14 @@
-import { Calendar, Users } from "lucide-react";
-import Link from "next/link";
+import { Calendar, Users } from 'lucide-react';
+import Link from 'next/link';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 
 export default function Tets() {
   return (
@@ -17,7 +17,7 @@ export default function Tets() {
         <CardHeader>
           <CardTitle className=" pb-4">Calendário</CardTitle>
           <CardDescription>
-            {" "}
+            {' '}
             <Calendar className="h-[4.2rem] w-[4.2rem] stroke-black  dark:stroke-white m-auto"></Calendar>
           </CardDescription>
         </CardHeader>

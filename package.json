@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "prettier": "npx prettier app components lib libs --check",
+    "prettier:fix": "npm run prettier -- --write"
+
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -47,6 +50,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20",
     "@types/react": "^18",
