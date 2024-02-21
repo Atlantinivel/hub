@@ -50,14 +50,14 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
   const footer = (
     <>
       <div className="px-4 pt-0 pb-4">
-        <Label>Time</Label>
+        <Label>Hora</Label>
         <Input
           type="time"
           onChange={handleTimeChange}
           value={selectedDateTime.toFormat('HH:mm')}
         />
       </div>
-      {!selectedDateTime && <p>Please pick a day.</p>}
+      {!selectedDateTime && <p>Hora</p>}
     </>
   );
 
@@ -67,7 +67,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
         <Button
           variant={'outline'}
           className={cn(
-            'w-[280px] justify-start text-left font-normal',
+            'w-[300px] justify-start text-left font-normal',
             !date && 'text-muted-foreground',
           )}
         >
@@ -75,7 +75,7 @@ export function DateTimePicker({ date, setDate }: DateTimePickerProps) {
           {date ? (
             selectedDateTime.toFormat('DDD HH:mm')
           ) : (
-            <span>Pick a date</span>
+            <span>Selecionar data e hora</span>
           )}
         </Button>
       </PopoverTrigger>

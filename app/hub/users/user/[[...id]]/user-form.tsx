@@ -2,10 +2,11 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
-import { revalidatePath } from 'next/cache';
+
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { ptBR } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -30,6 +31,19 @@ import { toast } from '@/components/ui/use-toast';
 import departments from '@/static-data/departments.json';
 import jobs from '@/static-data/jobs.json';
 
+import medicalLocals from '@/static-data/medicalLocals.json';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { DateTimePicker } from '@/components/own/date-time-picker';
+import { cn } from '@/lib/utils';
+import { Calendar } from '@/components/ui/calendar';
+import { CustomCalendar } from '@/components/own/custom-calendar/custom-calendar';
+
 const items = [
   {
     id: '1',
@@ -48,11 +62,10 @@ const profileFormSchema = z.object({
   fullName: z.string().min(2, {
     message: 'Este campo é obrigatório',
   }),
-  email: z
-    .string({
-      required_error: 'Este campo é obrigatório',
-    })
-    .email(),
+  birthDate: z.date({
+    required_error: 'Este campo é obrigatório',
+  }),
+  email: z.string().email().optional(),
   employeeNumber: z.string({
     required_error: 'Este campo é obrigatório',
   }),
@@ -70,12 +83,13 @@ const profileFormSchema = z.object({
   }),
   department: z.string(),
   job: z.string(),
-  // role: z
-  //   .string({
-  //     required_error: "Este campo é obrigatório",
-  //   }),
-  roles: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: 'You have to select at least one item.',
+
+  roles: z.array(z.string()).optional(),
+  nextMedicalAppointment: z.date({
+    required_error: 'Este campo é obrigatório',
+  }),
+  nextMedicalAppointmentLocal: z.string({
+    required_error: 'Este campo é obrigatório',
   }),
 });
 
@@ -93,6 +107,8 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
     mode: 'onChange',
   });
 
+  console.log('form', form.getValues());
+
   const onSubmit = async (data: ProfileFormValues) => {
     try {
       if (isEdit) {
@@ -108,7 +124,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
         toast({
           title: 'Funcionário atualizado.',
         });
-        revalidatePath(`api/users/user/${id[0]}`);
+        // router.push(`/hub/users/user/${id[0]}`, null, { shallow: true })
       } else {
         const response = await axios.post('/api/register', data, {
           headers: {
@@ -122,70 +138,79 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
         toast({
           title: 'Funcionário criado.',
         });
-        revalidatePath(`api/users/user/${id[0]}`);
+        // router.push(`/hub/users/user/${id[0]}`, null, { shallow: true })
       }
     } catch (error) {
       toast({
         title: 'Algo correu mal.',
       });
     }
-
-    toast({
-      title: 'Funcionário atualizado',
-    });
   };
 
   return (
-    <Form {...form}>
-      <div className="container py-3">
-        <h1 className="mb-6 text-3xl font-bold">
-          {isEdit ? 'Editar funcionário' : 'Adicionar funcionário'}
-        </h1>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Nome</FormLabel>
-                <FormDescription>Nome na plataforma</FormDescription>
-                <FormControl>
-                  <Input placeholder="Nome" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+    <div className="flex flex-row">
+      <Form {...form}>
+        <div className="container py-3">
+          <h1 className="mb-6 text-3xl font-bold">
+            {isEdit ? 'Editar funcionário' : 'Adicionar funcionário'}
+          </h1>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Nome</FormLabel>
+                  <FormDescription>Nome na plataforma</FormDescription>
+                  <FormControl>
+                    <Input
+                      className="max-w-[600px]"
+                      placeholder="Nome"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="fullName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Nome completo</FormLabel>
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Nome completo</FormLabel>
 
-                <FormControl>
-                  <Input placeholder="Nome completo" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="max-w-[600px]"
+                      placeholder="Nome completo"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Email</FormLabel>
 
-                <FormControl>
-                  <Input placeholder="Email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* <FormField
+                  <FormControl>
+                    <Input
+                      className="max-w-[600px]"
+                      placeholder="Email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
@@ -194,7 +219,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
 
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className=' max-w-[300px]'>
                       <SelectValue placeholder="Select a verified email to display" />
                     </SelectTrigger>
                   </FormControl>
@@ -208,145 +233,161 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
               </FormItem>
             )}
           /> */}
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Gênero</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Gênero</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className=" max-w-[300px]">
+                        <SelectValue placeholder="Selecione o gênero" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="male">Masculino</SelectItem>
+                      <SelectItem value="female">Feminino</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="employeeNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">
+                    Numero de funcionário
+                  </FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o gênero" />
-                    </SelectTrigger>
+                    <Input
+                      className="max-w-[600px]"
+                      placeholder="Numero de funcionário"
+                      {...field}
+                    />
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="male">Masculino</SelectItem>
-                    <SelectItem value="female">Feminino</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="employeeNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">
-                  Numero de funcionário
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="Numero de funcionário" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="personalPhoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">
-                  Numero de telemovel pessoal
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="Numero de telemovel pessoal" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <FormField
+              control={form.control}
+              name="personalPhoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">
+                    Numero de telemovel pessoal
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className="max-w-[600px]"
+                      placeholder="Numero de telemovel pessoal"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <FormField
-            control={form.control}
-            name="companyPhoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">
-                  Numero de telemovel empresa
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="Numero de telemovel pessoal" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="companyCode"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Codigo de obra</FormLabel>
-                <FormControl>
-                  <Input placeholder="Codigo de obra" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="department"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Departamento</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+            <FormField
+              control={form.control}
+              name="companyPhoneNumber"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">
+                    Numero de telemovel empresa
+                  </FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione o departamento" />
-                    </SelectTrigger>
+                    <Input
+                      className="max-w-[600px]"
+                      placeholder="Numero de telemovel pessoal"
+                      {...field}
+                    />
                   </FormControl>
-                  <SelectContent>
-                    {departments.map((d) => (
-                      <SelectItem key={d.value} value={d.id.toString()}>
-                        {d.value}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="job"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Função</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="companyCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Codigo de obra</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione a função" />
-                    </SelectTrigger>
+                    <Input
+                      className="max-w-[600px]"
+                      placeholder="Codigo de obra"
+                      {...field}
+                    />
                   </FormControl>
-                  <SelectContent>
-                    {jobs.map((d) => (
-                      <SelectItem key={d.value} value={d.id.toString()}>
-                        {d.value}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* <FormField
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="department"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Departamento</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className=" max-w-[300px]">
+                        <SelectValue placeholder="Selecione o departamento" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {departments.map((d) => (
+                        <SelectItem key={d.value} value={d.id.toString()}>
+                          {d.value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="job"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base">Função</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className=" max-w-[300px]">
+                        <SelectValue placeholder="Selecione a função" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {jobs.map((d) => (
+                        <SelectItem key={d.value} value={d.id.toString()}>
+                          {d.value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* <FormField
             control={form.control}
             name="role"
             render={({ field }) => (
@@ -354,7 +395,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                 <FormLabel className="text-base">Permissões</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className=' max-w-[300px]'>
                       <SelectValue placeholder="Selecione o tipo de permissões" />
                     </SelectTrigger>
                   </FormControl>
@@ -368,164 +409,154 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
               </FormItem>
             )}
           /> */}
-          <FormField
-            control={form.control}
-            name="roles"
-            render={() => (
-              <FormItem>
-                <div className="mb-4">
-                  <FormLabel className="text-base">Sidebar</FormLabel>
-                  <FormDescription>Plataformas que tem acesso</FormDescription>
-                </div>
-                {items.map((item) => (
-                  <FormField
-                    key={item.id}
-                    control={form.control}
-                    name="roles"
-                    render={({ field }) => {
-                      return (
-                        <FormItem
-                          key={item.id}
-                          className="flex flex-row items-start space-x-3 space-y-0"
+
+            <FormField
+              control={form.control}
+              name="nextMedicalAppointment"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-base">
+                    Consulta de trabalho
+                  </FormLabel>
+                  <FormControl>
+                    <DateTimePicker
+                      date={field.value || new Date()}
+                      setDate={field.onChange}
+                    ></DateTimePicker>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="nextMedicalAppointmentLocal"
+              render={({ field }) => (
+                <FormItem>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger className=" max-w-[300px]">
+                        <SelectValue placeholder="Selecione o local" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {medicalLocals.map((d) => (
+                        <SelectItem key={d.value} value={d.id.toString()}>
+                          {d.value}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="birthDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-base">
+                    Data de nascimento
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-[300px] pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground',
+                          )}
                         >
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(item.id)}
-                              onCheckedChange={(checked) => {
-                                return checked
-                                  ? field.onChange([...field.value, item.id])
-                                  : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item.id,
-                                      ),
-                                    );
-                              }}
-                            />
-                          </FormControl>
-                          <FormLabel className="font-normal">
-                            {item.label}
-                          </FormLabel>
-                        </FormItem>
-                      );
-                    }}
-                  />
-                ))}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-base">Bio</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Tell us a little bit about yourself"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                You can <span>@mention</span> other users and organizations to
-                link to them.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-          {/* <div>
-            {fields.map((field, index) => (
-              <FormField
-                control={form.control}
-                key={field.id}
-                name={`urls.${index}.value`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className={cn(index !== 0 && "sr-only")}>
-                      URLs
-                    </FormLabel>
-                    <FormDescription className={cn(index !== 0 && "sr-only")}>
-                      Add links to your website, blog, or social media profiles.
+                          {field.value ? (
+                            format(field.value, 'PPP', { locale: ptBR })
+                          ) : (
+                            <span>Selecionar data</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <CustomCalendar
+                        mode="single"
+                        captionLayout="dropdown-buttons"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date('1900-01-01')
+                        }
+                        fromYear={new Date('1900-01-01').getFullYear()}
+                        toYear={new Date().getFullYear()}
+                        // initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="roles"
+              render={() => (
+                <FormItem>
+                  <div className="mb-4">
+                    <FormLabel className="text-base">Plataformas</FormLabel>
+                    <FormDescription>
+                      Plataformas que tem acesso
                     </FormDescription>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-2"
-              onClick={() => append({ value: "" })}
-            >
-              Add URL
-            </Button>
-          </div> */}
-          {/* <FormField
-            control={form.control}
-            name="nextMedicalAppointment"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-base">Consulta de trabalho</FormLabel>
-                <FormControl>
-                  <DateTimePicker date={field.value || new Date()} setDate={field.onChange}></DateTimePicker>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> 
-          <FormField
-            control={form.control}
-            name="contractStartDate"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel className="text-base">Consulta de trabalho</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP", { locale: ptBR })
-                        ) : (
-                          <span>Selecionar data</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date("1900-01-01")
-                      }
-                      initialFocus
+                  </div>
+                  {items.map((item) => (
+                    <FormField
+                      key={item.id}
+                      control={form.control}
+                      name="roles"
+                      render={({ field }) => {
+                        return (
+                          <FormItem
+                            key={item.id}
+                            className="flex flex-row items-start space-x-3 space-y-0"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(item.id)}
+                                onCheckedChange={(checked) => {
+                                  return checked
+                                    ? // @ts-ignore
+                                      field.onChange([...field.value, item.id])
+                                    : field.onChange(
+                                        field.value?.filter(
+                                          (value) => value !== item.id,
+                                        ),
+                                      );
+                                }}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal">
+                              {item.label}
+                            </FormLabel>
+                          </FormItem>
+                        );
+                      }}
                     />
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
-          <div></div>
-          <Button type="submit">Update profile</Button>
-        </form>
-      </div>
-    </Form>
+                  ))}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type="submit">
+              {isEdit ? 'Atualizar funcionário' : 'Criar funcionário'}
+            </Button>
+          </form>
+        </div>
+      </Form>
+      {/* <Card >
+        teste
+      </Card> */}
+    </div>
   );
 };
 

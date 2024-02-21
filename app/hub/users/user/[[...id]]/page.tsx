@@ -8,7 +8,7 @@ async function getUser(id: string): Promise<User[] | undefined> {
 
   const response = await fetch(
     `${process.env.NEXTAUTH_URL}/api/users/user/${id[0]}`,
-    { signal },
+    { cache: 'no-store' },
   );
 
   const data = await response.json();
@@ -18,7 +18,8 @@ async function getUser(id: string): Promise<User[] | undefined> {
 const UserAddEdit = async ({ params }: { params: { id: string } }) => {
   const { id } = params;
 
-  const data = await getUser(id);
+  const userData = await getUser(id);
+  const [data] = await Promise.all([userData]);
 
   return <UserForm id={id} values={data}></UserForm>;
 };

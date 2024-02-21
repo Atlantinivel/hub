@@ -49,24 +49,82 @@ const authOptions: AuthOptions = {
     secret: process.env.NEXTAUTH_JWT_SECRET,
   },
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: '/hub',
-    signOut: '/login',
-    error: '/login',
-  },
 
   callbacks: {
-    // @ts-ignore
-    async session(session: any, user: any) {
-      if (user !== null) {
-        session.user = user;
-      }
-      return await session;
-    },
+    async jwt({ token, user }) {
+      // console.log('TOKEN', token, user);
 
-    async jwt({ token }) {
-      return await token;
+      if (user) {
+        // @ts-ignore
+        token = user;
+      }
+
+      return Promise.resolve(token);
     },
+    // @ts-ignore
+    async signIn({ user, account, profile }) {
+      // Update the user object with additional information
+      user = { ...user, ...profile };
+      // Save the provider to the session object
+      // console.log('user', user);
+
+      return { user, account, profile };
+    },
+    // @ts-ignore
+    async session(session, user, token) {
+      // console.log('session',session, user, token);
+
+      // if (user !== null) {
+      //   session.user = user;
+      // }
+      // return await session;
+      console.log('dsadasda', session, token);
+
+      // session.user = token.user;
+      // you might return this in new version
+      return Promise.resolve(session);
+      // return {
+      //   ...session,
+      //   user: {
+      //     ...session.user,
+      //     ...token,
+      //   },
+      // }
+    },
+    // async session(session, user, token) {
+    //   // If you have additional user information, you can fetch it here
+    //   console.log('user', session, user, token);
+
+    //   if (user && user.id) {
+    //     const additionalUserInfo = await prisma.user.findUnique({
+    //       where: { id: user._id },
+    //       // Include any additional fields you need
+    //     });
+
+    //     // Merge additional information into the session
+    //     return {
+    //       ...session,
+    //       user: {
+    //         ...session.user,
+    //         ...additionalUserInfo,
+    //       },
+    //     };
+    //   }
+    // },
+    // async session(session, token ) {
+    //   console.log('dsadasda', session, token);
+
+    //   session.user = token.user;
+    //   // you might return this in new version
+    //   return Promise.resolve(session)
+    // },
+
+    // async jwt({ token }) {
+    //   return await token;
+    // },
+  },
+  pages: {
+    signIn: '/hub',
   },
 };
 

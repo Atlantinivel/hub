@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 
 interface DatePickerProps {
   date: Date;
-  setDate?: () => void;
+  setDate?: (newDate?: Date) => void;
 }
 
 export function DatePicker({ date, setDate }: DatePickerProps) {
