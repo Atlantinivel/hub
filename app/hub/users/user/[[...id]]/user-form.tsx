@@ -85,12 +85,16 @@ const profileFormSchema = z.object({
   job: z.string(),
 
   roles: z.array(z.string()).optional(),
-  nextMedicalAppointment: z.date({
-    required_error: 'Este campo é obrigatório',
-  }),
-  nextMedicalAppointmentLocal: z.string({
-    required_error: 'Este campo é obrigatório',
-  }),
+  nextMedicalAppointment: z
+    .date({
+      required_error: 'Este campo é obrigatório',
+    })
+    .optional(),
+  nextMedicalAppointmentLocal: z
+    .string({
+      required_error: 'Este campo é obrigatório',
+    })
+    .optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -410,7 +414,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
             )}
           /> */}
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="nextMedicalAppointment"
               render={({ field }) => (
@@ -449,7 +453,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                   </Select>
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name="birthDate"
