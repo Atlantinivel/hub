@@ -7,13 +7,13 @@ import Agenda from '@/app/hub/calendar/components/agenda/agenda';
 
 //@ts-ignore
 async function getUsers(): Promise<any[]> {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/users`);
+  const res = await fetch(`${process.env.VERCEL_URL}/api/users`);
   const data = await res.json();
   return data;
 }
 
 async function getMeetings(): Promise<any[]> {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/meeting`, {
+  const res = await fetch(`${process.env.VERCEL_URL}/api/meeting`, {
     cache: 'no-store',
   });
   const data = await res.json();

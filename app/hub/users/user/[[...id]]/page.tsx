@@ -7,7 +7,7 @@ async function getUser(id: string): Promise<User[] | undefined> {
   if (!id) return;
 
   const response = await fetch(
-    `${process.env.NEXTAUTH_URL}/api/users/user/${id[0]}`,
+    `${process.env.VERCEL_URL}/api/users/user/${id[0]}`,
     { cache: 'no-store' },
   );
 

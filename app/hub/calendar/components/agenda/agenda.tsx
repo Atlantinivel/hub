@@ -111,6 +111,7 @@ const Agenda = ({ users, meetings }: PropTypes) => {
         room: event.room,
         start: event.start || event.startTime,
         end: event.end || event.endTime,
+        color: 'purple'
       })),
     // @ts-ignore
     [eventStore.events],
