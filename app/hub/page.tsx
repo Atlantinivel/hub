@@ -40,6 +40,19 @@ export default function Tets() {
           </Button>
         </CardContent>
       </Card>
+      <Card className=" min-w-[200px]">
+        <CardHeader>
+          <CardTitle className=" pb-4">Forum</CardTitle>
+          <CardDescription>
+            <Users className="h-[4.2rem] w-[4.2rem] stroke-black  dark:stroke-white  m-auto"></Users>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button asChild>
+            <Link href="/hub/forum">Entrar</Link>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

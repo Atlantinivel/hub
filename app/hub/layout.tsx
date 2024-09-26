@@ -13,7 +13,6 @@ export default async function HubLayout({
 }) {
   // @ts-ignore
   const session = await getServerSession(config);
-
   const isAuthenticated = !!session;
 
   if (!isAuthenticated) {
