@@ -26,9 +26,11 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   try {
+    console.log('6342323');
     const posts = await prisma.post.findMany({
       include: {
         author: true,
+        comments: true,
       },
     });
 

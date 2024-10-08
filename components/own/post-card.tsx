@@ -5,11 +5,11 @@ import { MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 
 import { formatTimeToNow } from '@/lib/utils';
-
+type PostTypo = Post & {
+  author: User;
+};
 interface PostProps {
-  post: Post & {
-    author: User;
-  };
+  post: PostTypo;
 }
 
 const PostCard = ({ post }: PostProps) => {
@@ -21,7 +21,7 @@ const PostCard = ({ post }: PostProps) => {
             <span>Posted by {post.author.fullName}</span>{' '}
             {formatTimeToNow(post.createdAt as Date)}
           </div>
-          <a href={`/forum/${post.id}`}>
+          <a href={`/hub/forum/${post.id}`}>
             <h1 className="text-lg font-semibold py-2 leading-6 text-gray-900">
               {post.title}
             </h1>
@@ -35,7 +35,7 @@ const PostCard = ({ post }: PostProps) => {
 
       <div className="bg-gray-50 z-20 text-sm px-4 py-4 sm:px-6">
         <Link
-          href={`/forum/${post.id}`}
+          href={`/hub/forum/${post.id}`}
           className="w-fit flex items-center gap-2"
         >
           comments

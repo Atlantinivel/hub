@@ -1,5 +1,5 @@
 'use client';
-import { Post } from '@prisma/client';
+import { Post, User } from '@prisma/client';
 import { useCallback, useEffect, useState } from 'react';
 
 import { createPost, getPosts } from '@/app/actions/forum';
@@ -12,6 +12,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogClose,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -28,6 +29,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+type PostTypo = Post & {
+  author: User;
+};
+// interface PostProps {
+//   post: PostTypo;
+// }
 
 export function Forum() {
   const [job, setJob] = useState<string>();
@@ -36,6 +43,7 @@ export function Forum() {
   const [content, setContent] = useState('');
   const [filtering, setFiltering] = useState('');
   const [posts, setPosts] = useState<Post[]>();
+  const [post, setPost] = useState<Post>();
   const getPostsServerAction = async () => {
     const posts = await getPosts();
     setPosts(posts.data);
@@ -43,7 +51,7 @@ export function Forum() {
 
   useEffect(() => {
     getPostsServerAction();
-  }, []);
+  }, [post]);
   const handleCreatePost = useCallback(async () => {
     const request = await createPost({
       departmentid: department,
@@ -51,6 +59,7 @@ export function Forum() {
       content: content,
       userId: '65bd343d627409b6f55d4b1e',
     });
+    setPost(request.data);
   }, [content, department, title]);
   return (
     <>
@@ -154,19 +163,22 @@ export function Forum() {
               />
             </div>
             <DialogFooter>
-              <Button type="submit" onClick={handleCreatePost}>
-                Save changes
-              </Button>
+              <DialogClose asChild>
+                <Button type="submit" onClick={handleCreatePost}>
+                  Save changes
+                </Button>
+              </DialogClose>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
       {/* display posts */}
-      <div className='flex flex-col gap-3'>
-      {posts &&
-        posts.map((it: Post, index) => (
-         <PostCard key={index} post={it as Post}></PostCard>
-        ))}</div>
+      <div className="flex flex-col gap-3">
+        {posts &&
+          posts.map((it: Post, index) => (
+            <PostCard key={index} post={it as PostTypo}></PostCard>
+          ))}
+      </div>
     </>
   );
 }
