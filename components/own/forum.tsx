@@ -43,10 +43,12 @@ export function Forum() {
   const [content, setContent] = useState('');
   const [filtering, setFiltering] = useState('');
   const [posts, setPosts] = useState<Post[]>();
+  const [filterPosts, setFilterPosts] = useState<Post[]>();
   const [post, setPost] = useState<Post>();
   const getPostsServerAction = async () => {
     const posts = await getPosts();
     setPosts(posts.data);
+    setFilterPosts(posts.data);
   };
 
   useEffect(() => {
@@ -61,6 +63,25 @@ export function Forum() {
     });
     setPost(request.data);
   }, [content, department, title]);
+
+  const handleDepartmentChange = useCallback(
+    (o: any) => {
+      console.log(o);
+      const newPostList = posts?.filter((item) => item.departmentid == o);
+      setFilterPosts(newPostList);
+      setDepartment(o);
+    },
+    [department, filterPosts],
+  );
+  const handleClean = useCallback(
+    (o: any) => {
+      setFilterPosts(posts);
+      setDepartment('');
+      setJob('');
+      setFiltering('');
+    },
+    [filterPosts],
+  );
   return (
     <>
       {/* Filters and add post */}
@@ -74,7 +95,7 @@ export function Forum() {
           />
           <Select
             onValueChange={(o) => {
-              setDepartment(o);
+              handleDepartmentChange(o);
             }}
             value={department || ''}
           >
@@ -108,9 +129,7 @@ export function Forum() {
           </Select>
           <Button
             onClick={() => {
-              setDepartment('');
-              setJob('');
-              setFiltering('');
+              handleClean();
             }}
             variant="outline"
             className="ml-auto"
@@ -174,8 +193,8 @@ export function Forum() {
       </div>
       {/* display posts */}
       <div className="flex flex-col gap-3">
-        {posts &&
-          posts.map((it: Post, index) => (
+        {filterPosts &&
+          filterPosts.map((it: Post, index) => (
             <PostCard key={index} post={it as PostTypo}></PostCard>
           ))}
       </div>
