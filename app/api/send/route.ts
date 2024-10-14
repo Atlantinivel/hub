@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
   //const resend = new Resend(process.env.NEXT_RESEND_API_KEY);
   const url = new URL(req.url);
   const id = url.searchParams.get('id');
+  const postId = url.searchParams.get('postId');
   console.log(id);
   const users = await prisma.user.findMany({
     where: {
@@ -43,12 +44,13 @@ export async function GET(req: NextRequest) {
       'forum-template.html',
     );
     const source = fs.readFileSync(filePath, 'utf-8').toString();
+    const replacedHtml = source.replaceAll('{POSTID}', postId as string); // Replace template variables
 
     const mailOptions = {
       from: 'carlosama1902@gmail.com', // sender
       to: emails, // receiver
       subject: 'Atlantinivel - new forum post',
-      html: source,
+      html: replacedHtml,
     };
     const emailRes = await transporter.sendMail(mailOptions);
 

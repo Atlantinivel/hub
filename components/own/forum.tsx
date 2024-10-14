@@ -29,6 +29,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { sendEmail } from '@/app/actions/send';
 type PostTypo = Post & {
   author: User;
 };
@@ -62,6 +63,7 @@ export function Forum() {
       userId: '65bd343d627409b6f55d4b1e',
     });
     setPost(request.data);
+    sendEmail(department as string, request.data.id as string);
   }, [content, department, title]);
 
   const handleDepartmentChange = useCallback(
