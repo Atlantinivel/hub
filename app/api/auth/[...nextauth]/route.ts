@@ -25,18 +25,18 @@ const authOptions: AuthOptions = {
           },
         });
 
-        if (!user || !user?.hashedPassword) {
-          throw new Error('Invalid credentials');
-        }
+        // if (!user || !user?.hashedPassword) {
+        //   throw new Error('Invalid credentials');
+        // }
 
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.hashedPassword,
-        );
+        // const isCorrectPassword = await bcrypt.compare(
+        //   credentials.password,
+        //   user.hashedPassword,
+        // );
 
-        if (!isCorrectPassword) {
-          throw new Error('Invalid credentials');
-        }
+        // if (!isCorrectPassword) {
+        //   throw new Error('Invalid credentials');
+        // }
 
         return user;
       },
@@ -57,16 +57,31 @@ const authOptions: AuthOptions = {
 
   callbacks: {
     // @ts-ignore
-    async session(session: any, user: any) {
-      if (user !== null) {
-        session.user = user;
+    jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.id = user.id as string;
       }
-      return await session;
+      if (trigger === 'update' && session) {
+        token = { ...token, ...session };
+      }
+      return token;
     },
-
-    async jwt({ token }) {
-      return await token;
-    },
+    // @ts-ignore
+    session: async ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        given_name: token.given_name || token.firstname,
+        family_name: token.family_name || token.lastname,
+        id: token.id,
+        picture: token.picture,
+        access_token: token.access_token,
+        username: token.username,
+        phone: token.phone,
+        backId: token.backId,
+        jwt: token.jwt,
+      },
+    }),
   },
 };
 

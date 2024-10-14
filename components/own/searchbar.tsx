@@ -17,7 +17,7 @@ import {
 
 interface SearchBarProps {}
 
-const SearchBar: FC<SearchBarProps> = ({}) => {
+const SearchBar: FC<SearchBarProps> = () => {
   const [input, setInput] = useState<string>('');
   const pathname = usePathname();
   const commandRef = useRef<HTMLDivElement>(null);

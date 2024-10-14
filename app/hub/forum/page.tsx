@@ -1,3 +1,6 @@
+import { getServerSession } from 'next-auth/next';
+
+import { config } from '@/app/api/auth/[...nextauth]/route';
 import { Forum } from '@/components/own/forum';
 import { DataTable } from '@/components/own/table';
 import { User, columns } from '@/components/own/user-table/columns';

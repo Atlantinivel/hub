@@ -6,6 +6,8 @@ import './globals.css';
 import { ThemeProvider } from '@/components/ui/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 
+// eslint-disable-next-line import/order
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {

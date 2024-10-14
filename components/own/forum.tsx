@@ -1,8 +1,12 @@
 'use client';
 import { Post, User } from '@prisma/client';
+import { getServerSession } from 'next-auth';
+import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { createPost, getPosts } from '@/app/actions/forum';
+import { sendEmail } from '@/app/actions/send';
+import { config } from '@/app/api/auth/[...nextauth]/route';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -29,7 +33,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
-import { sendEmail } from '@/app/actions/send';
 type PostTypo = Post & {
   author: User;
 };
@@ -46,12 +49,14 @@ export function Forum() {
   const [posts, setPosts] = useState<Post[]>();
   const [filterPosts, setFilterPosts] = useState<Post[]>();
   const [post, setPost] = useState<Post>();
+  const { data: session } = useSession();
   const getPostsServerAction = async () => {
     const posts = await getPosts();
+
     setPosts(posts.data);
     setFilterPosts(posts.data);
   };
-
+  console.log(session);
   useEffect(() => {
     getPostsServerAction();
   }, [post]);
@@ -60,7 +65,7 @@ export function Forum() {
       departmentid: department,
       title: title,
       content: content,
-      userId: '65bd343d627409b6f55d4b1e',
+      userId: session?.user?.id ,
     });
     setPost(request.data);
     sendEmail(department as string, request.data.id as string);
@@ -130,8 +135,8 @@ export function Forum() {
             </SelectContent>
           </Select>
           <Button
-            onClick={() => {
-              handleClean();
+            onClick={(o) => {
+              handleClean(o);
             }}
             variant="outline"
             className="ml-auto"
