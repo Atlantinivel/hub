@@ -6,8 +6,9 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { createComment } from '@/app/actions/comment';
 
-import CreateComment from './comments/create-comment';
 import { getPostById } from '@/app/actions/post';
+
+import CreateComment from './comments/create-comment';
 
 import PostComment from './comments/post-comment';
 import PostItem from './post/post';
@@ -24,7 +25,6 @@ type ExtendedPost = Post & {
 
 interface PostSectionProps {
   id: string;
-
 }
 
 const PostSection = ({ id }: PostSectionProps) => {
