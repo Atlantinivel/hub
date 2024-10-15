@@ -1,6 +1,7 @@
 'use client';
 import { Comment, Post, User } from '@prisma/client';
 
+import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { createComment } from '@/app/actions/comment';
@@ -29,6 +30,7 @@ const PostSection = ({ id }: PostSectionProps) => {
   const [input, setInput] = useState<string>('');
   const [comment, setComment] = useState<Comment>();
   const [post, setPost] = useState<ExtendedPost>();
+  const { data: session } = useSession();
   useEffect(() => {
     getPostsServerAction(id);
   }, [comment]);
@@ -37,7 +39,7 @@ const PostSection = ({ id }: PostSectionProps) => {
     const request = await createComment({
       text: input,
       postId: post?.id as string,
-      userId: '65bd343d627409b6f55d4b1e',
+      userId: session?.user?.id,
     });
 
     setComment(request.data);
@@ -52,12 +54,10 @@ const PostSection = ({ id }: PostSectionProps) => {
 
   return (
     <div className="flex flex-col gap-y-4 mt-4">
-      <hr className="w-full h-px my-6" />
-
       <div className="flex flex-col gap-y-6 mt-4">
         {post && (
           <div key={post.id} className="flex flex-col">
-            <div className="mb-2">
+            <div className="mb-2  rounded-md bg-white  border-2 border-input shadow p-2 ">
               <PostItem post={post as PostTypo} postId={post.id} />
             </div>
             <CreateComment
@@ -71,7 +71,7 @@ const PostSection = ({ id }: PostSectionProps) => {
               return (
                 <div
                   key={reply.id}
-                  className="ml-2 py-2 pl-4 border-l-2 border-zinc-200"
+                  className="m-2 py-2 pl-4 border-l-2 border-y-2 border-zinc-200"
                 >
                   <PostComment comment={reply} postId={post.id} />
                 </div>

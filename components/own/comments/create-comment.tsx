@@ -22,7 +22,7 @@ const CreateComment = ({
   handleClick,
 }: CreateCommentProps) => {
   return (
-    <div className="grid w-full gap-1.5">
+    <div className="grid w-full   border-2 border-input shadow border-zinc-100 bg-zinc-100  rounded-md gap-1.5 p-2">
       <Label htmlFor="comment">Your comment</Label>
       <div className="mt-2">
         <Textarea

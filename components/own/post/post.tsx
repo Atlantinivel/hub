@@ -31,7 +31,7 @@ const PostItem = ({ post, postId }: PostCommentProps) => {
           <div className="flex items-center">
             <div className="ml-2 flex items-center gap-x-2">
               <p className="text-sm font-medium text-gray-900">
-                u/{post?.author?.fullName}
+                {post?.author?.fullName}
               </p>
 
               <p className="max-h-40 truncate text-xs text-zinc-500">
