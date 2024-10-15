@@ -11,31 +11,30 @@ module.exports = {
   "rules": {
     "prettier/prettier": [
       "error",
-      { endOfLine: "auto" }
+      { endOfLine: "auto",   }
     ],
     "no-unused-vars": "off",
-    "import/order": [
-      "error",
-      {
-        "groups": [
-          [
-            "builtin",
-            "external"
-          ],
-          [
-            "internal"
-          ],
-          [
-            "parent",
-            "sibling",
-            "index"
-          ]
-        ],
-        "newlines-between": "always-and-inside-groups",
-        "alphabetize": {
-          "order": "asc"
-        }
-      }
-    ]
+ 
   }
-}
+}   
+// "import/order": [
+//       "error",
+//       {
+//         "groups": [
+//           [
+//             "builtin",
+//             "external"
+//           ],
+//           [
+//             "internal"
+//           ],
+//           [
+//             "parent",
+//             "sibling",
+//             "index"
+//           ]
+//         ],
+//         "newlines-between": "always-and-inside-groups",
+       
+//       }
+//     ]

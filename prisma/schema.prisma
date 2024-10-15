@@ -64,27 +64,46 @@ model User {
 
   posts Post[]
 
-  comments Comment[]
+  comments        Comment[]
+  createdMeetings Meeting[] @relation("MeetingCreator")
+  meetingsIds     String[]  @db.ObjectId
+  meetings        Meeting[] @relation(fields: [meetingsIds], references: [id])
 }
-model Comment{
-  id String    @id @default(auto()) @map("_id") @db.ObjectId
-  text String
+
+model Meeting {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  description String?
+  room        String?
+  startTime   DateTime
+  endTime     DateTime
+  duration    Int?
+  creator     User      @relation("MeetingCreator", fields: [creatorId], references: [id])
+  creatorId   String    @db.ObjectId
+  guests      User[]    @relation(fields: [guestsIds], references: [id])
+  guestsIds   String[]  @db.ObjectId
+  createdAt   DateTime? @default(now())
+  updatedAt   DateTime? @updatedAt
+  isOOO       Boolean
+}
+
+model Comment {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  text      String
   createdAt DateTime? @default(now())
-  author User @relation(fields:[userId], references: [id])
-  userId String @db.ObjectId
-  post Post  @relation(fields:[postId], references: [id])
-  postId String @db.ObjectId
+  author    User      @relation(fields: [userId], references: [id])
+  userId    String    @db.ObjectId
+  post      Post      @relation(fields: [postId], references: [id])
+  postId    String    @db.ObjectId
 }
 
 model Post {
-  id String    @id @default(auto()) @map("_id") @db.ObjectId
-  title String
-  content String
-  createdAt DateTime? @default(now())
-  updatedAt DateTime? @updatedAt
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  content      String
+  createdAt    DateTime? @default(now())
+  updatedAt    DateTime? @updatedAt
   departmentid String?
-  author User @relation(fields:[userId], references: [id])
-  userId String @db.ObjectId
-  comments Comment[]
+  author       User      @relation(fields: [userId], references: [id])
+  userId       String    @db.ObjectId
+  comments     Comment[]
 }
-

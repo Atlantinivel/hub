@@ -15,10 +15,11 @@ import { cn } from '@/lib/utils';
 
 interface DatePickerProps {
   date: Date;
-  setDate?: () => void;
+  isRange: boolean;
+  setDate?: (newDate?: Date) => void;
 }
 
-export function DatePicker({ date, setDate }: DatePickerProps) {
+export function DatePicker({ date, setDate, isRange }: DatePickerProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -35,7 +36,7 @@ export function DatePicker({ date, setDate }: DatePickerProps) {
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
-          mode="single"
+          mode={isRange ? 'range' : "single"}
           selected={date}
           onSelect={setDate}
           initialFocus

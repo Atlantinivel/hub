@@ -49,11 +49,6 @@ const authOptions: AuthOptions = {
     secret: process.env.NEXTAUTH_JWT_SECRET,
   },
   secret: process.env.NEXTAUTH_SECRET,
-  pages: {
-    signIn: '/hub',
-    signOut: '/login',
-    error: '/login',
-  },
 
   callbacks: {
     // @ts-ignore

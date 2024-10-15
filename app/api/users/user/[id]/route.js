@@ -35,11 +35,12 @@ export async function POST(request, { params }) {
       data: data,
     });
 
-    console.log(user);
+    console.log('TESTE', user);
 
     return NextResponse.json(user);
   } catch (error) {
     console.log(error);
+    console.log('ERROR', error);
     return NextResponse.json(400);
   }
 }

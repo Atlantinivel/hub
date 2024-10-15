@@ -48,3 +48,40 @@
     --ring: 224.3 76.3% 48%;
   }
 }
+
+.rdp-vhidden {
+  @apply hidden;
+}
+
+.fc-dayGridMonth-button,
+.fc-button,
+.fc-button-primary {
+  font-size: 0.875rem !important;
+  line-height: 1.25rem !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  background-color: hsl(var(--primary)) !important;
+  border-radius: calc(var(--radius) - 2px) !important;
+  border: none !important;
+}
+.fc-view-harness,
+.fc-view-harness-active {
+  border-radius: calc(var(--radius) - 2px) !important;
+  overflow: hidden;
+  border-color: hsl(var(--input));
+}
+.fc-scrollgrid,
+.fc-scrollgrid-liquid {
+  border-radius: calc(var(--radius) - 2px) !important;
+  overflow: hidden;
+  border-color: hsl(var(--input));
+}
+.fc-view-harness,
+.fc-view-harness-active {
+  border-radius: calc(var(--radius) - 2px) !important;
+  border-color: hsl(var(--input));
+}
+
+.fc-button-group {
+  gap: 10px;
+}
