@@ -6,9 +6,9 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { createComment } from '@/app/actions/comment';
 
+import CreateComment from './comments/create-comment';
 import { getPostById } from '@/app/actions/post';
 
-import CreateComment from './comments/create-comment';
 import PostComment from './comments/post-comment';
 import PostItem from './post/post';
 type PostTypo = Post & {
@@ -24,6 +24,7 @@ type ExtendedPost = Post & {
 
 interface PostSectionProps {
   id: string;
+
 }
 
 const PostSection = ({ id }: PostSectionProps) => {
@@ -42,7 +43,6 @@ const PostSection = ({ id }: PostSectionProps) => {
       //@ts-expect-error
       userId: session?.user?.id,
     });
-
     setComment(request.data);
     setInput('');
   }, [input, post?.id]);
