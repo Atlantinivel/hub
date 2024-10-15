@@ -65,7 +65,8 @@ export function Forum() {
       departmentid: department,
       title: title,
       content: content,
-      userId: session?.user?.id ,
+      //@ts-expect-error
+      userId: session?.user?.id,
     });
     setPost(request.data);
     sendEmail(department as string, request.data.id as string);

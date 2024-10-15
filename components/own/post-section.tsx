@@ -39,6 +39,7 @@ const PostSection = ({ id }: PostSectionProps) => {
     const request = await createComment({
       text: input,
       postId: post?.id as string,
+      //@ts-expect-error
       userId: session?.user?.id,
     });
 
