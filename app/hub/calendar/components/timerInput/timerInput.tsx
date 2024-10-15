@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import React, { useState } from 'react';
 
 import axios from 'axios';
 import { toast } from '@/components/ui/use-toast';
@@ -9,9 +10,8 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 import { Combobox } from '@/components/ui/combobox';
-import { Form, FormField } from '@/components/ui/form';
+import { Form, FormDescription, FormField } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Toggle } from '@/components/ui/toggle';
 import {
   Select,
   SelectContent,
@@ -24,8 +24,10 @@ import { Button } from '@/components/ui/button';
 import ManualMethod from './manualMethod/manualMethod';
 import rooms from '@/static-data/rooms.json';
 
+import { Checkbox } from '@/components/ui/checkbox';
 import { EntryType, TimerInputProps } from './timerInput.types';
 import useEventStore from '@/app/store/agendaStore';
+import departmentsList from '@/static-data/departments.json';
 
 const timerSchema = z.object({
   id: z.string().optional(),
@@ -36,6 +38,7 @@ const timerSchema = z.object({
   duration: z.number().optional(),
   startTime: z.date(),
   endTime: z.date(),
+  isOOO: z.boolean()
 });
 
 export type FormType = z.infer<typeof timerSchema>;
@@ -49,6 +52,10 @@ const TimerInput: FC<TimerInputProps> = ({
   const eventStore = useEventStore();
   // @ts-ignore
   const removeEvent = useEventStore((state) => state.removeEvent);
+  const [departments, setDepartments] = useState([]);
+  const [isOOO, setIsOOO] = useState(false);
+
+
 
   const form = useForm<FormType>({
     resolver: zodResolver(timerSchema),
@@ -57,10 +64,11 @@ const TimerInput: FC<TimerInputProps> = ({
       description: '',
       creatorId: '65bd343d627409b6f55d4b1e',
       guestsIds: entry?.guestsIds || [],
-      room: entry?.room || '',
+      room: entry?.room,
       duration: 0,
       startTime: new Date(),
       endTime: new Date(),
+      isOOO: false
     },
   });
 
@@ -71,14 +79,13 @@ const TimerInput: FC<TimerInputProps> = ({
         id: entry?.id || '',
         description: entry.description || '',
         guestsIds: entry.guestsIds || [],
-        room: entry.room || '',
+        room: entry.room,
         startTime: new Date(entry.start),
         endTime: new Date(entry.end),
       }));
     }
   }, [entry, form]);
 
-  console.log(form.getValues());
 
   const onSubmit = async ({
     duration,
@@ -101,7 +108,6 @@ const TimerInput: FC<TimerInputProps> = ({
       },
     );
 
-    console.log('entrou', entry, values, result);
 
     if (entry?.isEditing) {
       // @ts-ignore
@@ -145,10 +151,49 @@ const TimerInput: FC<TimerInputProps> = ({
     closeModal?.();
   };
 
+  const handleDepartmentChange = (departmentsState: any) => {
+
+    setDepartments(departmentsState);
+    const filteredListUsers = departmentsState?.map((id) => {
+      const u = users.filter((user: any) => user.department == id);
+      if (u.length > 0) {
+        return u;
+      }
+
+
+    });
+
+    const filteredUsers = filteredListUsers.filter((element: any) => {
+      return element !== undefined;
+    });
+
+
+    if (filteredUsers.flat(1).length === 0) return;
+
+    const listIdUsers = filteredUsers.flat(1).map((user: any) => user.id);
+
+    const list = form.getValues().guestsIds;
+
+    listIdUsers.map((id: string) => {
+      if (!list!.includes(id)) {
+        list!.push(id);
+      }
+    });
+
+    form.setValue('guestsIds', list);
+  };
+
   const usersItems = useMemo(
     //@ts-ignore
-    () => users.map(({ id, name }) => ({ value: id, label: name })),
+    () => users.map(({ id, name }) => ({ value: id.toString(), label: name })),
     [users],
+  );
+
+  const asd = form.getValues().isOOO;
+  const departmentsItems = useMemo(
+    //@ts-ignore
+    () => departmentsList.map(({ id, value }) => ({ value: id, label: value })),
+    [departmentsList],
   );
   return (
     <Form {...form}>
@@ -167,46 +212,79 @@ const TimerInput: FC<TimerInputProps> = ({
             />
           )}
         />
-        <div className="flex flex-col items-start gap-4">
-          <FormField
-            control={form.control}
-            name="guestsIds"
-            render={({ field }) => (
-              <Combobox
-                items={usersItems}
-                label={'Convidados'}
-                isMultiple
-                value={field.value || ''}
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </div>
-
         <FormField
           control={form.control}
-          name="room"
+          name="isOOO"
           render={({ field }) => (
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger className=" max-w-[210px]">
-                <SelectValue placeholder="Sala" />
-              </SelectTrigger>
-              <SelectContent>
-                {rooms.map((d) => (
-                  <SelectItem key={d.value} value={d.id.toString()}>
-                    {d.value}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <>
+              <FormDescription>
+                Indisponível
+              </FormDescription>
+              <Checkbox
+                checked={field.value}
+                onCheckedChange={(e) => {
+                  setIsOOO(!field.value)
+                  field.onChange(e)
+                }}
+                {...field}
+              /></>
           )}
         />
 
+        {!isOOO && (
+          <>
+            <div className="flex flex-col items-start gap-4">
+              <FormField
+                control={form.control}
+                name="guestsIds"
+                render={({ field }) => (
+                  <Combobox
+                    items={usersItems}
+                    label={'Convidados'}
+                    isMultiple
+                    value={field.value || ''}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
+
+            <Combobox
+              items={departmentsItems}
+              label={'Departamentos'}
+              isMultiple
+              value={departments}
+              onChange={handleDepartmentChange}
+            />
+            <FormField
+              control={form.control}
+              name="room"
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <SelectTrigger className=" max-w-[210px]">
+                    <SelectValue placeholder="Sala" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {rooms.map((d) => (
+                      <SelectItem key={d.value} value={d.id.toString()}>
+                        {d.value}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </>)}
+
+
+
+
+
         <div className="flex flex-wrap items-center gap-4 ">
-          <ManualMethod form={form} />
+          <ManualMethod form={form} isOOO={isOOO} />
         </div>
         <div className="flex items-center gap-4">
-          <Button type="submit">{entry?.isEditing ? 'Save' : 'Add'}</Button>
+          <Button type="submit">{entry?.isEditing ? 'Gravar' : 'Adicionar'}</Button>
           {entry?.isEditing && (
             <Button type="button" onClick={() => removeMeeting()}>
               {'Remover'}

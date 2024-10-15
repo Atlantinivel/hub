@@ -6,7 +6,6 @@ export async function GET() {
   try {
     const users = await prisma.user.findMany();
 
-    console.log(users);
 
     return NextResponse.json(users);
   } catch (error) {

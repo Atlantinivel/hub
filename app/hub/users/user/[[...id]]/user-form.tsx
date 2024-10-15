@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useRef, useState } from 'react';
 
 import { ptBR } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
@@ -41,9 +42,11 @@ import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { DateTimePicker } from '@/components/own/date-time-picker';
 import { cn } from '@/lib/utils';
-import { Calendar } from '@/components/ui/calendar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
 import { CustomCalendar } from '@/components/own/custom-calendar/custom-calendar';
 
+import { useRouter } from 'next/navigation'
 const items = [
   {
     id: '1',
@@ -62,9 +65,7 @@ const profileFormSchema = z.object({
   fullName: z.string().min(2, {
     message: 'Este campo é obrigatório',
   }),
-  birthDate: z.date({
-    required_error: 'Este campo é obrigatório',
-  }),
+  birthDate: z.coerce.date(),
   email: z.string().email().optional(),
   employeeNumber: z.string({
     required_error: 'Este campo é obrigatório',
@@ -85,10 +86,9 @@ const profileFormSchema = z.object({
   job: z.string(),
 
   roles: z.array(z.string()).optional(),
-  nextMedicalAppointment: z
-    .date({
-      required_error: 'Este campo é obrigatório',
-    })
+  nextMedicalAppointment: z.coerce.date({
+    required_error: 'Este campo é obrigatório',
+  })
     .optional(),
   nextMedicalAppointmentLocal: z
     .string({
@@ -110,12 +110,26 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
     defaultValues: id ? values : defaultValues,
     mode: 'onChange',
   });
+  const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+
 
   console.log('form', form.getValues());
+  const handleFileChange = (event: any) => {
+    const selectedFile = event.target.files[0];
 
+    const imageURL = URL.createObjectURL(selectedFile);
+    setUploadedImage(imageURL);
+  };
+
+  const handleUploadImage = () => {
+    fileInputRef.current?.click();
+  };
   const onSubmit = async (data: ProfileFormValues) => {
     try {
       if (isEdit) {
+        console.log('ENTROU')
         const response = await axios.post(`/api/users/user/${id[0]}`, data, {
           headers: {
             'Content-Type': 'application/json',
@@ -128,7 +142,8 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
         toast({
           title: 'Funcionário atualizado.',
         });
-        // router.push(`/hub/users/user/${id[0]}`, null, { shallow: true })
+
+        router.push(`/hub/users`)
       } else {
         const response = await axios.post('/api/register', data, {
           headers: {
@@ -142,9 +157,11 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
         toast({
           title: 'Funcionário criado.',
         });
-        // router.push(`/hub/users/user/${id[0]}`, null, { shallow: true })
+        router.push(`/hub/users`)
       }
     } catch (error) {
+      console.log('error', error);
+
       toast({
         title: 'Algo correu mal.',
       });
@@ -158,6 +175,29 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
           <h1 className="mb-6 text-3xl font-bold">
             {isEdit ? 'Editar funcionário' : 'Adicionar funcionário'}
           </h1>
+          <div className='flex flex-row items-center gap-3 my-3'>
+            <Avatar className=" h-40 w-40 ">
+              {uploadedImage ? (
+                <AvatarImage
+                  src={uploadedImage}
+                  className=" bg-cover object-cover"
+                  alt="@shadcn"
+                />
+              ) : (
+                <AvatarFallback>
+                  Foto
+                </AvatarFallback>
+              )}
+            </Avatar>
+            <Button className="" onClick={handleUploadImage}>
+              Inserir  foto
+            </Button></div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+          />
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 ">
             <FormField
               control={form.control}
@@ -261,6 +301,53 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="birthDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-base">
+                    Data de nascimento
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-[300px] pl-3 text-left font-normal',
+                            !field.value && 'text-muted-foreground',
+                          )}
+                        >
+                          {field.value ? (
+                            format(new Date(field.value), 'PPP', { locale: ptBR })
+                          ) : (
+                            <span>Selecionar data</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <CustomCalendar
+                        mode="single"
+                        captionLayout="dropdown-buttons"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date('1900-01-01')
+                        }
+                        fromYear={new Date('1900-01-01').getFullYear()}
+                        toYear={new Date().getFullYear()}
+
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name="employeeNumber"
@@ -414,7 +501,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
             )}
           /> */}
 
-            {/* <FormField
+            <FormField
               control={form.control}
               name="nextMedicalAppointment"
               render={({ field }) => (
@@ -424,7 +511,8 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                   </FormLabel>
                   <FormControl>
                     <DateTimePicker
-                      date={field.value || new Date()}
+
+                      date={field.value ? new Date(field.value) : new Date()}
                       setDate={field.onChange}
                     ></DateTimePicker>
                   </FormControl>
@@ -437,7 +525,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
               name="nextMedicalAppointmentLocal"
               render={({ field }) => (
                 <FormItem>
-                  <Select onValueChange={field.onChange}>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className=" max-w-[300px]">
                         <SelectValue placeholder="Selecione o local" />
@@ -451,52 +539,6 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                       ))}
                     </SelectContent>
                   </Select>
-                </FormItem>
-              )}
-            /> */}
-            <FormField
-              control={form.control}
-              name="birthDate"
-              render={({ field }) => (
-                <FormItem className="flex flex-col">
-                  <FormLabel className="text-base">
-                    Data de nascimento
-                  </FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={'outline'}
-                          className={cn(
-                            'w-[300px] pl-3 text-left font-normal',
-                            !field.value && 'text-muted-foreground',
-                          )}
-                        >
-                          {field.value ? (
-                            format(field.value, 'PPP', { locale: ptBR })
-                          ) : (
-                            <span>Selecionar data</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <CustomCalendar
-                        mode="single"
-                        captionLayout="dropdown-buttons"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date > new Date() || date < new Date('1900-01-01')
-                        }
-                        fromYear={new Date('1900-01-01').getFullYear()}
-                        toYear={new Date().getFullYear()}
-                        // initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -529,12 +571,12 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                                 onCheckedChange={(checked) => {
                                   return checked
                                     ? // @ts-ignore
-                                      field.onChange([...field.value, item.id])
+                                    field.onChange([...field.value, item.id])
                                     : field.onChange(
-                                        field.value?.filter(
-                                          (value) => value !== item.id,
-                                        ),
-                                      );
+                                      field.value?.filter(
+                                        (value) => value !== item.id,
+                                      ),
+                                    );
                                 }}
                               />
                             </FormControl>

@@ -40,15 +40,36 @@ export function Combobox({
   const [open, setOpen] = React.useState(false);
 
   const buttonText = useMemo(() => {
-    if (isMultiple && value.length > 0)
-      return (value as string[]).map((selectedItem) => (
-        <span
-          className="mx-0.5 rounded-sm bg-accent p-1 text-xs"
-          key={selectedItem}
-        >
-          {items.find((item) => item.value === selectedItem)?.label}
-        </span>
-      ));
+    if (isMultiple && value.length > 0) {
+      if (value.length <= 2) {
+        return (value as string[]).map((selectedItem) => (
+          <span
+            className="mx-0.5 rounded-sm bg-accent p-1 text-xs"
+            key={selectedItem}
+          >
+            {items.find((item) => item.value === selectedItem)?.label}
+          </span>
+        ));
+      } else {
+        return <>{(value as string[]).slice(0, 2).map((selectedItem) => (
+          <span
+            className="mx-0.5 rounded-sm bg-accent p-1 text-xs"
+            key={selectedItem}
+          >
+            {items.find((item) => item.value === selectedItem)?.label}
+          </span>
+        ))}
+          <span
+            className="mx-0.5 rounded-sm bg-accent p-1 text-xs"
+
+          >
+            +{value.length - 2}
+          </span>
+
+        </>
+
+      }
+    }
 
     if (!isMultiple && value)
       return items.find((item) => item.value === value)?.label;

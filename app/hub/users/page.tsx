@@ -1,14 +1,29 @@
+
+'use client';
 import { DataTable } from '@/components/own/table';
 import { User, columns } from '@/components/own/user-table/columns';
+import { useEffect, useState } from 'react';
+import { Loader2 } from 'lucide-react';
 
-async function getUsers(): Promise<User[]> {
-  const res = await fetch(`${process.env.VERCEL_URL}/api/users`);
-  const data = await res.json();
-  return data;
-}
+export default function Users() {
+  const [data, setData] = useState(null)
 
-export default async function Users() {
-  const data = await getUsers();
+  const [isLoading, setLoading] = useState(true)
+
+
+
+  useEffect(() => {
+    fetch(`/api/users`)
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data)
+        setLoading(false)
+      })
+  }, [])
+
+
+  if (isLoading) return <div className='container h-full flex align-middle items-center'><Loader2 className="m-auto h-12  w-12 animate-spin"></Loader2></div>
+  if (!data) return <p>No data</p>
 
   return (
     <div className="container py-3">

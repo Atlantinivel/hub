@@ -15,10 +15,11 @@ import { Input } from '@/components/ui/input';
 
 import { ManualMethodProps } from './manualMethod.types';
 
-const ManualMethod: FC<ManualMethodProps> = ({ form }) => {
+const ManualMethod: FC<ManualMethodProps> = ({ form, isOOO }) => {
   const handleChangeTime = (
     e: ChangeEvent<HTMLInputElement>,
     currentDate: Date,
+
     update: (value: Date) => void,
   ) => {
     const value = e.target.value;
@@ -66,8 +67,9 @@ const ManualMethod: FC<ManualMethodProps> = ({ form }) => {
 
   return (
     <>
-      <div className="flex items-center gap-1">
-        <FormField
+
+      {!isOOO &&
+        (<div className="flex items-center gap-1"> <FormField
           control={form.control}
           name="startTime"
           render={({ field }) => (
@@ -80,37 +82,38 @@ const ManualMethod: FC<ManualMethodProps> = ({ form }) => {
             />
           )}
         />
-        -
-        <div className="relative">
-          <FormField
-            control={form.control}
-            name="endTime"
-            render={({ field }) => {
-              const startTimeValue = form.getValues().startTime;
-              const sameDay = isSameDay(field.value, startTimeValue);
+          -
+          <div className="relative">
+            <FormField
+              control={form.control}
+              name="endTime"
+              render={({ field }) => {
+                const startTimeValue = form.getValues().startTime;
+                const sameDay = isSameDay(field.value, startTimeValue);
 
-              return (
-                <>
-                  <Input
-                    name={field.name}
-                    value={format(field.value, 'HH:mm')}
-                    onChange={(e) =>
-                      handleChangeTime(e, field.value, field.onChange)
-                    }
-                    onBlur={() => handleOnBlur(startTimeValue, field.value)}
-                    type="time"
-                  />
-                  {!sameDay && (
-                    <span className="absolute -right-[5px] -top-[5px] h-[18px] min-w-[18px] rounded-[30px] bg-black text-center text-xs font-semibold text-white">
-                      1
-                    </span>
-                  )}
-                </>
-              );
-            }}
-          />
+                return (
+                  <>
+                    <Input
+                      name={field.name}
+                      value={format(field.value, 'HH:mm')}
+                      onChange={(e) =>
+                        handleChangeTime(e, field.value, field.onChange)
+                      }
+                      onBlur={() => handleOnBlur(startTimeValue, field.value)}
+                      type="time"
+                    />
+                    {!sameDay && (
+                      <span className="absolute -right-[5px] -top-[5px] h-[18px] min-w-[18px] rounded-[30px] bg-black text-center text-xs font-semibold text-white">
+                        1
+                      </span>
+                    )}
+                  </>
+                );
+              }}
+            />
+          </div>
         </div>
-      </div>
+        )}
 
       <FormField
         control={form.control}
@@ -119,6 +122,7 @@ const ManualMethod: FC<ManualMethodProps> = ({ form }) => {
           return (
             <DatePicker
               date={value}
+              isRange={isOOO}
               setDate={(date?: Date) =>
                 // if date doesn't exist we set the start time to "today"
                 handleChangeDatePicker(date ?? new Date(), value)

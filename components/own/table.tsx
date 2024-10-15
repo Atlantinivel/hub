@@ -84,24 +84,12 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 py-4">
           <Input
-            placeholder="Nome..."
-            // value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-            // onChange={event => {
-            //     table.getColumnCanGlobalFilter()?.setFilterValue(event.target.value);
-            // }
-            // }
+            placeholder="Pesquisa..."
+
             value={filtering}
             onChange={(e) => setFiltering(e.target.value)}
             className="max-w-sm"
           />
-          {/* <Input
-                        placeholder='Nome...'
-                        value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-                        onChange={event =>
-                            table.getColumn('name')?.setFilterValue(event.target.value)
-                        }
-                        className='max-w-sm'
-                    /> */}
           <Select
             onValueChange={(o) => {
               setDepartment(o);
@@ -123,6 +111,8 @@ export function DataTable<TData, TValue>({
           <Select
             onValueChange={(o) => {
               setJob(o);
+              console.log('o', o);
+
               table.getColumn('job')?.setFilterValue(o);
             }}
             value={job || ''}
@@ -132,8 +122,8 @@ export function DataTable<TData, TValue>({
             </SelectTrigger>
             <SelectContent>
               {jobs.map((d) => (
-                <SelectItem key={d.value} value={d.id.toString()}>
-                  {d.value}
+                <SelectItem key={d.value.toString()} value={d.id.toString()}>
+                  {d.value.toString()}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -193,9 +183,9 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                     </TableHead>
                   );
                 })}

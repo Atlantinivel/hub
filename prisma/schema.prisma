@@ -80,4 +80,5 @@ model Meeting {
   guestsIds   String[]  @db.ObjectId
   createdAt   DateTime? @default(now())
   updatedAt   DateTime? @updatedAt
+  isOOO       Boolean
 }

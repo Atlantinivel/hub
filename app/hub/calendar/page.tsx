@@ -4,7 +4,10 @@ import TimerInput from '@/app/hub/calendar/components/timerInput/timerInput';
 
 // import { Status, Project, Tag } from './timer.types';
 import Agenda from '@/app/hub/calendar/components/agenda/agenda';
+import { getServerSession } from 'next-auth';
+import { config } from '@/app/api/auth/[...nextauth]/route';
 
+// import { config } from '../api/auth/[...nextauth]/route';
 //@ts-ignore
 async function getUsers(): Promise<any[]> {
   const res = await fetch(`${process.env.VERCEL_URL}/api/users`);
@@ -12,31 +15,23 @@ async function getUsers(): Promise<any[]> {
   return data;
 }
 
-async function getMeetings(): Promise<any[]> {
-  const res = await fetch(`${process.env.VERCEL_URL}/api/meeting`, {
+async function getMeetings(id): Promise<any[]> {
+  const res = await fetch(`${process.env.VERCEL_URL}/api/meeting?guests=${id}`, {
     cache: 'no-store',
   });
   const data = await res.json();
   return data;
 }
-async function getProjects() {
-  // const projects = await getData<Project[]>('projects');
-  // return projects.filter(({ status }) => status !== Status.Archived);
-}
 
-async function getTags() {
-  // const tags = await getData<Tag[]>('tags');
-  // return tags.filter(({ status }) => status !== Status.Archived);
-}
 
 const Timer = async () => {
+  const session = await getServerSession(config);
+
+
   const usersData = getUsers();
-  const meetingsData = getMeetings();
+  const meetingsData = getMeetings(session.token.id);
   const [users, meetings] = await Promise.all([usersData, meetingsData]);
-  console.log(
-    'meetings',
-    meetings.map((a) => a.guests[0]),
-  );
+
 
   return (
     <div className=" container ">
@@ -49,3 +44,4 @@ const Timer = async () => {
 };
 
 export default Timer;
+
