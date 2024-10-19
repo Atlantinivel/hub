@@ -93,8 +93,8 @@ export function Forum() {
   return (
     <>
       {/* Filters and add post */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 py-4">
+      <div className="flex sm:flex-row flex-col  sm:items-center items-start justify-between ">
+        <div className="flex sm:flex-row flex-col  sm:items-center items-start gap-2 py-4">
           <Input
             placeholder="Nome..."
             value={filtering}
@@ -140,7 +140,7 @@ export function Forum() {
               handleClean(o);
             }}
             variant="outline"
-            className="ml-auto"
+            className="sm:ml-auto"
           >
             Limpar
           </Button>
@@ -200,7 +200,7 @@ export function Forum() {
         </Dialog>
       </div>
       {/* display posts */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 pt-5">
         {filterPosts &&
           filterPosts.map((it: Post, index) => (
             <PostCard key={index} post={it as PostTypo}></PostCard>

@@ -19,30 +19,31 @@ import { Loader2 } from 'lucide-react';
 // }
 
 const UserAddEdit = ({ params }: { params: { id: string } }) => {
-
   const { id } = params;
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
 
-  const [isLoading, setLoading] = useState(true)
-
-
+  const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) {
-      setLoading(false)
-      return
-    };
+      setLoading(false);
+      return;
+    }
     fetch(`/api/users/user/${id[0]}`)
       .then((res) => res.json())
       .then((data) => {
-        setData(data)
-        setLoading(false)
-      })
-  }, [])
+        setData(data);
+        setLoading(false);
+      });
+  }, []);
 
-
-  if (isLoading) return <div className='container h-full flex align-middle items-center'><Loader2 className="m-auto h-12  w-12 animate-spin"></Loader2></div>
-  if (!data && id) return <p>No data</p>
+  if (isLoading)
+    return (
+      <div className="container h-full flex align-middle items-center">
+        <Loader2 className="m-auto h-12  w-12 animate-spin"></Loader2>
+      </div>
+    );
+  if (!data && id) return <p>No data</p>;
 
   return <UserForm id={id} values={data}></UserForm>;
 };

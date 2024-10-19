@@ -5,6 +5,14 @@ import { Comment, User } from '@prisma/client';
 import { useEffect } from 'react';
 
 import { formatTimeToNow } from '@/lib/utils';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface PostCommentProps {
   comment: Comment & {
@@ -30,20 +38,30 @@ const PostComment = ({ comment, postId }: PostCommentProps) => {
     <>
       {comment ? (
         <>
-          <div className="flex flex-col">
-            <div className="flex items-center">
-              <div className="ml-2 flex items-center gap-x-2">
-                <p className="text-sm font-medium text-gray-900">
-                  u/{comment.author.fullName}
-                </p>
-
-                <p className="max-h-40 truncate text-xs text-zinc-500">
-                  {formatTimeToNow(comment.createdAt as Date)}
-                </p>
+          <Card>
+            <CardHeader className="py-3">
+              <div className="flex flex-row gap-3 max-h-40 mt-1 text-xs text-gray-500">
+                <div>
+                  <Avatar>
+                    <AvatarImage
+                      src="https://github.com/shadcn.png"
+                      alt="@shadcn"
+                    />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </div>
+                <div className="flex flex-col align-middle pt-1">
+                  <span className="text-sm font-bold">
+                    {comment.author.fullName}
+                  </span>{' '}
+                  Posted at {formatTimeToNow(comment.createdAt as Date)}
+                </div>
               </div>
-            </div>
-            <p className="text-sm text-zinc-900 mt-2">{comment.text}</p>
-          </div>{' '}
+            </CardHeader>
+            <CardContent>
+              <CardDescription>{comment.text}</CardDescription>
+            </CardContent>
+          </Card>
         </>
       ) : (
         <div className="flex flex-col">No Comment</div>

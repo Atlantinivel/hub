@@ -5,6 +5,17 @@ import { MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 
 import { formatTimeToNow } from '@/lib/utils';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '../ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { Badge } from '../ui/badge';
+import departments from '@/static-data/departments.json';
 type PostTypo = Post & {
   author: User;
 };
@@ -14,34 +25,49 @@ interface PostProps {
 
 const PostCard = ({ post }: PostProps) => {
   return (
-    <div className="rounded-md bg-white  border-2 border-input shadow">
-      <div className="px-6 py-4 flex justify-between">
-        <div className="w-0 flex-1">
-          <div className="max-h-40 mt-1 text-xs text-gray-500">
-            <span>Posted by {post.author.fullName}</span>{' '}
-            {formatTimeToNow(post.createdAt as Date)}
+    <Card>
+      <CardHeader className="py-3">
+        <div className="flex flex-row gap-3 max-h-40 mt-1 text-xs text-gray-500">
+          <div>
+            <Avatar>
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
           </div>
-          <a href={`/hub/forum/${post.id}`}>
-            <h1 className="text-lg font-semibold py-2 leading-6 text-gray-900">
-              {post.title}
-            </h1>
-          </a>
-
-          <div className="relative text-sm max-h-40 w-full overflow-clip">
-            <div> {post.content}</div>
+          <div className="flex flex-col align-middle pt-1">
+            <span className="text-sm font-bold">{post.author.fullName}</span>{' '}
+            Posted at {formatTimeToNow(post.createdAt as Date)}
           </div>
         </div>
-      </div>
-
-      <div className="bg-gray-50 z-20 text-sm px-4 py-4 sm:px-6">
-        <Link
-          href={`/hub/forum/${post.id}`}
-          className="w-fit flex items-center gap-2"
-        >
-          comments
-        </Link>
-      </div>
-    </div>
+      </CardHeader>
+      <CardContent>
+        <a href={`/hub/forum/${post.id}`}>
+          <CardTitle className="py-3 text-base">{post.title}</CardTitle>
+          <CardDescription>{post.content}</CardDescription>
+        </a>
+      </CardContent>
+      <CardFooter className="flex justify-between">
+        <div className="flex flex-row justify-between w-full gap-3 max-h-40 mt-1 text-xs text-gray-500">
+          <div>
+            <Badge className="bg-neutral-200" variant="outline">
+              {
+                departments.find(
+                  (x) => x.id == Number(post.departmentid as string),
+                )?.value
+              }
+            </Badge>
+          </div>
+          <div className="flex flex-col  align-middle">
+            <Link
+              href={`/hub/forum/${post.id}`}
+              className="w-fit flex items-center gap-2 underline"
+            >
+              View comments
+            </Link>
+          </div>
+        </div>
+      </CardFooter>
+    </Card>
   );
 };
 export default PostCard;
