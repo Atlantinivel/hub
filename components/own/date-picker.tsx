@@ -38,6 +38,7 @@ export function DatePicker({ date, setDate, isRange }: DatePickerProps) {
         <Calendar
           mode={isRange ? 'range' : 'single'}
           selected={date}
+          //@ts-ignore
           onSelect={setDate}
           initialFocus
         />
