@@ -21,14 +21,8 @@ export async function createPost(body: {
 export async function getPosts(queryParams?: GenericObject) {
   let url = 'forum';
 
-  // const data = await getData(url);
-  // return {
-  //   data: data,
-  // };
-  const res = await fetch(`${baseUrl}/api/${url}`, {
-    method: 'GET',
-  });
-
-  const data = await res.json();
-  return data;
+  const data = await getData(url);
+  return {
+    data: data,
+  };
 }
