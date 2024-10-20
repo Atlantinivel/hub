@@ -25,7 +25,7 @@ export async function getPosts(queryParams?: GenericObject) {
   // return {
   //   data: data,
   // };
-  const res = await fetch(`/api/${url}`, {
+  const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'GET',
   });
 
