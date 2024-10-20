@@ -14,7 +14,7 @@ async function getUsers(): Promise<any[]> {
   const data = await res.json();
   return data;
 }
-
+//@ts-ignore
 async function getMeetings(id): Promise<any[]> {
   const res = await fetch(
     `${process.env.VERCEL_URL}/api/meeting?guests=${id}`,
@@ -30,6 +30,7 @@ const Timer = async () => {
   const session = await getServerSession(config);
 
   const usersData = getUsers();
+  //@ts-ignore
   const meetingsData = getMeetings(session.token.id);
   const [users, meetings] = await Promise.all([usersData, meetingsData]);
 

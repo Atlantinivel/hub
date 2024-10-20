@@ -195,7 +195,7 @@ const Agenda = ({ users, meetings }: PropTypes) => {
     setRooms('');
     setMyEvents(false);
     getMeetings();
-     // @ts-ignore
+    // @ts-ignore
   }, [data?.token?.id]);
   const handleOnChangeMyEvents = useCallback(() => {
     if (!myEvents) {

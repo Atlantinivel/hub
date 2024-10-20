@@ -51,6 +51,7 @@ const Settings = () => {
   const { data } = session;
 
   if (!data) return null;
+  //@ts-ignore
   const { token } = data;
   const handleFileChange = (event: any) => {
     const selectedFile = event.target.files[0];

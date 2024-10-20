@@ -149,7 +149,7 @@ const TimerInput: FC<TimerInputProps> = ({
 
   const handleDepartmentChange = (departmentsState: any) => {
     setDepartments(departmentsState);
-    const filteredListUsers = departmentsState?.map((id) => {
+    const filteredListUsers = departmentsState?.map((id: any) => {
       const u = users.filter((user: any) => user.department == id);
       if (u.length > 0) {
         return u;
@@ -210,6 +210,7 @@ const TimerInput: FC<TimerInputProps> = ({
           render={({ field }) => (
             <>
               <FormDescription>Indisponível</FormDescription>
+              {/* @ts-ignore */}
               <Checkbox
                 checked={field.value}
                 onCheckedChange={(e) => {
@@ -241,6 +242,7 @@ const TimerInput: FC<TimerInputProps> = ({
             </div>
 
             <Combobox
+              // @ts-ignore
               items={departmentsItems}
               label={'Departamentos'}
               isMultiple
