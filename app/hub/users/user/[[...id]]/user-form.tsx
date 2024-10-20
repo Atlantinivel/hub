@@ -46,7 +46,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 import { CustomCalendar } from '@/components/own/custom-calendar/custom-calendar';
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 const items = [
   {
     id: '1',
@@ -86,9 +86,10 @@ const profileFormSchema = z.object({
   job: z.string(),
 
   roles: z.array(z.string()).optional(),
-  nextMedicalAppointment: z.coerce.date({
-    required_error: 'Este campo é obrigatório',
-  })
+  nextMedicalAppointment: z.coerce
+    .date({
+      required_error: 'Este campo é obrigatório',
+    })
     .optional(),
   nextMedicalAppointmentLocal: z
     .string({
@@ -110,10 +111,9 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
     defaultValues: id ? values : defaultValues,
     mode: 'onChange',
   });
-  const router = useRouter()
+  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-
 
   console.log('form', form.getValues());
   const handleFileChange = (event: any) => {
@@ -129,7 +129,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
   const onSubmit = async (data: ProfileFormValues) => {
     try {
       if (isEdit) {
-        console.log('ENTROU')
+        console.log('ENTROU');
         const response = await axios.post(`/api/users/user/${id[0]}`, data, {
           headers: {
             'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
           title: 'Funcionário atualizado.',
         });
 
-        router.push(`/hub/users`)
+        router.push(`/hub/users`);
       } else {
         const response = await axios.post('/api/register', data, {
           headers: {
@@ -157,7 +157,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
         toast({
           title: 'Funcionário criado.',
         });
-        router.push(`/hub/users`)
+        router.push(`/hub/users`);
       }
     } catch (error) {
       console.log('error', error);
@@ -175,7 +175,7 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
           <h1 className="mb-6 text-3xl font-bold">
             {isEdit ? 'Editar funcionário' : 'Adicionar funcionário'}
           </h1>
-          <div className='flex flex-row items-center gap-3 my-3'>
+          <div className="flex flex-row items-center gap-3 my-3">
             <Avatar className=" h-40 w-40 ">
               {uploadedImage ? (
                 <AvatarImage
@@ -184,14 +184,13 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                   alt="@shadcn"
                 />
               ) : (
-                <AvatarFallback>
-                  Foto
-                </AvatarFallback>
+                <AvatarFallback>Foto</AvatarFallback>
               )}
             </Avatar>
             <Button className="" onClick={handleUploadImage}>
-              Inserir  foto
-            </Button></div>
+              Inserir foto
+            </Button>
+          </div>
           <input
             type="file"
             ref={fileInputRef}
@@ -320,7 +319,9 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                           )}
                         >
                           {field.value ? (
-                            format(new Date(field.value), 'PPP', { locale: ptBR })
+                            format(new Date(field.value), 'PPP', {
+                              locale: ptBR,
+                            })
                           ) : (
                             <span>Selecionar data</span>
                           )}
@@ -339,7 +340,6 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                         }
                         fromYear={new Date('1900-01-01').getFullYear()}
                         toYear={new Date().getFullYear()}
-
                       />
                     </PopoverContent>
                   </Popover>
@@ -511,7 +511,6 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                   </FormLabel>
                   <FormControl>
                     <DateTimePicker
-
                       date={field.value ? new Date(field.value) : new Date()}
                       setDate={field.onChange}
                     ></DateTimePicker>
@@ -525,7 +524,10 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
               name="nextMedicalAppointmentLocal"
               render={({ field }) => (
                 <FormItem>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger className=" max-w-[300px]">
                         <SelectValue placeholder="Selecione o local" />
@@ -571,12 +573,12 @@ const UserForm = ({ id, values }: { id: string; values: any }) => {
                                 onCheckedChange={(checked) => {
                                   return checked
                                     ? // @ts-ignore
-                                    field.onChange([...field.value, item.id])
+                                      field.onChange([...field.value, item.id])
                                     : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item.id,
-                                      ),
-                                    );
+                                        field.value?.filter(
+                                          (value) => value !== item.id,
+                                        ),
+                                      );
                                 }}
                               />
                             </FormControl>

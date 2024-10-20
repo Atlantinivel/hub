@@ -3,7 +3,6 @@ import React from 'react';
 import { SideMenu } from '@/components/own/side-menu/side-menu';
 import { Separator } from '@/components/ui/separator';
 
-
 export default async function HubLayout({
   children,
 }: {

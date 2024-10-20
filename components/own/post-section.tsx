@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 import { Comment, Post, User } from '@prisma/client';
 

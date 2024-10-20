@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
@@ -41,7 +42,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useSession } from 'next-auth/react';
 
-// const arrayColors = ['#fbf0c3', 
+// const arrayColors = ['#fbf0c3',
 // '#938b50',
 // '#3f0e07',
 // '#4f4a2a',
@@ -99,7 +100,6 @@ const Agenda = ({ users, meetings }: PropTypes) => {
   const { data } = session;
   // const { token } = data;
 
-
   const eventStore = useEventStore();
   // @ts-ignore
   const addEvents = useEventStore((state) => state.addEvents);
@@ -115,7 +115,6 @@ const Agenda = ({ users, meetings }: PropTypes) => {
 
   const [guests, setGuests] = useState<String[]>([]);
   const [room, setRooms] = useState('');
-
 
   const [entry, setEntry] = useState<Event>({
     id: '',
@@ -169,53 +168,44 @@ const Agenda = ({ users, meetings }: PropTypes) => {
     });
   };
 
-  const getMeetings = useCallback(
-    async () => {
-      const res = await fetch(`/api/meeting?guests=${guests}&room=${room}`, {
-        cache: 'no-store',
-      });
-      const data = await res.json();
+  const getMeetings = useCallback(async () => {
+    const res = await fetch(`/api/meeting?guests=${guests}&room=${room}`, {
+      cache: 'no-store',
+    });
+    const data = await res.json();
 
-      if (data) {
-        addEvents(data)
-      } else {
-        addEvents([])
-      }
-      return data;
-
-    },
-    [guests, room],
-  );
+    if (data) {
+      addEvents(data);
+    } else {
+      addEvents([]);
+    }
+    return data;
+  }, [guests, room]);
   useEffect(() => {
+    // @ts-ignore
     if (data?.token?.id) {
+      // @ts-ignore
       setGuests([data?.token?.id]);
     }
-  }, [data?.token?.id])
+    // @ts-ignore
+  }, [data?.token?.id]);
 
+  const cleanFilters = useCallback(() => {
+    setGuests([]);
+    setRooms('');
+    setMyEvents(false);
+    getMeetings();
+     // @ts-ignore
+  }, [data?.token?.id]);
+  const handleOnChangeMyEvents = useCallback(() => {
+    if (!myEvents) {
+      setGuests([...guests, data?.token?.id]);
+    } else {
+      setGuests([]);
+    }
 
-
-  const cleanFilters = useCallback(
-    () => {
-      setGuests([])
-      setRooms('')
-      setMyEvents(false);
-      getMeetings();
-    },
-    [data?.token?.id],
-  );
-  const handleOnChangeMyEvents = useCallback(
-    () => {
-      if (!myEvents) {
-        setGuests([...guests, data?.token?.id])
-      } else {
-        setGuests([])
-      }
-
-      setMyEvents(!myEvents);
-
-    },
-    [guests, myEvents, data],
-  );
+    setMyEvents(!myEvents);
+  }, [guests, myEvents, data]);
 
   const usersItems = useMemo(
     //@ts-ignore
@@ -242,13 +232,13 @@ const Agenda = ({ users, meetings }: PropTypes) => {
 
   return (
     <>
-      <div
-
-        className="mb-6 flex min-h-[70px] flex-wrap items-center gap-4 rounded-md border p-3 mt-3"
-      >
-
+      <div className="mb-6 flex min-h-[70px] flex-wrap items-center gap-4 rounded-md border p-3 mt-3">
         <div className="flex items-center space-x-2">
-          <Switch checked={myEvents} onCheckedChange={handleOnChangeMyEvents} id="my-events" />
+          <Switch
+            checked={myEvents}
+            onCheckedChange={handleOnChangeMyEvents}
+            id="my-events"
+          />
           <Label htmlFor="my-events">Mostrar os meus eventos</Label>
         </div>
         <Combobox
@@ -258,11 +248,7 @@ const Agenda = ({ users, meetings }: PropTypes) => {
           value={guests}
           onChange={setGuests}
         />
-        <Select
-          onValueChange={setRooms}
-          defaultValue=''
-          value={room}
-        >
+        <Select onValueChange={setRooms} defaultValue="" value={room}>
           <SelectTrigger className=" max-w-[210px]">
             <SelectValue placeholder="Sala" />
           </SelectTrigger>
@@ -275,8 +261,8 @@ const Agenda = ({ users, meetings }: PropTypes) => {
           </SelectContent>
         </Select>
 
-        <Button onClick={cleanFilters} >Limpar</Button>
-        <Button onClick={getMeetings} >Aplicar</Button>
+        <Button onClick={cleanFilters}>Limpar</Button>
+        <Button onClick={getMeetings}>Aplicar</Button>
       </div>
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}

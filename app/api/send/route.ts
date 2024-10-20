@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
   const id = url.searchParams.get('id');
   const postId = url.searchParams.get('postId');
   console.log(id);
-  
+
   const users = await prisma.user.findMany({
     where: {
       department: id,

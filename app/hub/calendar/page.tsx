@@ -16,22 +16,22 @@ async function getUsers(): Promise<any[]> {
 }
 
 async function getMeetings(id): Promise<any[]> {
-  const res = await fetch(`${process.env.VERCEL_URL}/api/meeting?guests=${id}`, {
-    cache: 'no-store',
-  });
+  const res = await fetch(
+    `${process.env.VERCEL_URL}/api/meeting?guests=${id}`,
+    {
+      cache: 'no-store',
+    },
+  );
   const data = await res.json();
   return data;
 }
 
-
 const Timer = async () => {
   const session = await getServerSession(config);
-
 
   const usersData = getUsers();
   const meetingsData = getMeetings(session.token.id);
   const [users, meetings] = await Promise.all([usersData, meetingsData]);
-
 
   return (
     <div className=" container ">
@@ -44,4 +44,3 @@ const Timer = async () => {
 };
 
 export default Timer;
-
