@@ -51,10 +51,17 @@ export function Forum() {
   const [post, setPost] = useState<Post>();
   const { data: session } = useSession();
   const getPostsServerAction = async () => {
-    const posts = await getPosts();
+    // const posts = await getPosts();
+    fetch(`/api/forum`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log('forum data', data);
+        setPosts(data);
+        setFilterPosts(data);
+      });
 
-    setPosts(posts.data);
-    setFilterPosts(posts.data);
+    // setPosts(posts.data);
+    // setFilterPosts(posts.data);
   };
   console.log(session);
   useEffect(() => {
