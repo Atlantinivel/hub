@@ -6,7 +6,6 @@ export async function GET(request, { params }) {
   try {
     const { id } = params;
 
-
     const users = await prisma.user.findMany({
       where: {
         department: id,
@@ -21,4 +20,3 @@ export async function GET(request, { params }) {
     return NextResponse.json(400);
   }
 }
-

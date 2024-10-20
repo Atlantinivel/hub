@@ -18,7 +18,7 @@ import { useRouter } from 'next/navigation';
 export function UserNav() {
   const session = useSession();
   console.log('session sad', session);
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <DropdownMenu>

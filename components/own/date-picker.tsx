@@ -36,7 +36,7 @@ export function DatePicker({ date, setDate, isRange }: DatePickerProps) {
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
-          mode={isRange ? 'range' : "single"}
+          mode={isRange ? 'range' : 'single'}
           selected={date}
           onSelect={setDate}
           initialFocus

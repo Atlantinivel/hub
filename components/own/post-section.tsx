@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use client';
 import { Comment, Post, User } from '@prisma/client';
 
@@ -12,6 +13,7 @@ import CreateComment from './comments/create-comment';
 
 import PostComment from './comments/post-comment';
 import PostItem from './post/post';
+import PostCard from './post-card';
 type PostTypo = Post & {
   author: User;
 };
@@ -58,7 +60,7 @@ const PostSection = ({ id }: PostSectionProps) => {
       <div className="flex flex-col gap-y-6 mt-4">
         {post && (
           <div key={post.id} className="flex flex-col">
-            <div className="mb-2  rounded-md bg-white  border-2 border-input shadow p-2 ">
+            <div className="pb-3">
               <PostItem post={post as PostTypo} postId={post.id} />
             </div>
             <CreateComment
@@ -70,10 +72,7 @@ const PostSection = ({ id }: PostSectionProps) => {
             {/* Render replies */}
             {post?.comments?.map((reply: CommentTypo) => {
               return (
-                <div
-                  key={reply.id}
-                  className="m-2 py-2 pl-4 border-l-2 border-y-2 border-zinc-200"
-                >
+                <div key={reply.id} className=" py-2 pl-4">
                   <PostComment comment={reply} postId={post.id} />
                 </div>
               );

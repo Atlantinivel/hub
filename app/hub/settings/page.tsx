@@ -1,4 +1,3 @@
-
 // 'use client';
 // import { DataTable } from '@/components/own/table';
 // import { User, columns } from '@/components/own/user-table/columns';
@@ -10,8 +9,6 @@
 
 //   const [isLoading, setLoading] = useState(true)
 
-
-
 //   useEffect(() => {
 //     fetch(`/api/users`)
 //       .then((res) => res.json())
@@ -20,7 +17,6 @@
 //         setLoading(false)
 //       })
 //   }, [])
-
 
 //   if (isLoading) return <div className='container h-full flex align-middle items-center'><Loader2 className="m-auto h-12  w-12 animate-spin"></Loader2></div>
 //   if (!data) return <p>No data</p>
@@ -35,18 +31,21 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { signOut, useSession } from 'next-auth/react';
 
-
-
-
 const Settings = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
-
 
   const session = useSession();
   const { data } = session;
@@ -77,9 +76,7 @@ const Settings = () => {
                   alt="@shadcn"
                 />
               ) : (
-                <AvatarFallback>
-                  {token.name?.charAt(0)}
-                </AvatarFallback>
+                <AvatarFallback>{token.name?.charAt(0)}</AvatarFallback>
               )}
             </Avatar>
 
@@ -94,7 +91,7 @@ const Settings = () => {
               <CardTitle> {token.name} </CardTitle>
               <CardDescription>{token.id}</CardDescription>
               <Button className="mt-4" onClick={handleUploadImage}>
-                Inserir  foto
+                Inserir foto
               </Button>
             </div>
           </CardHeader>
@@ -124,8 +121,8 @@ const Settings = () => {
               </div>
             </div>
           </CardContent>
-          <CardFooter className='gap-4'>
-            <Button >Recuperar password</Button>
+          <CardFooter className="gap-4">
+            <Button>Recuperar password</Button>
             <Button onClick={() => signOut()}>Log out</Button>
           </CardFooter>
         </Card>

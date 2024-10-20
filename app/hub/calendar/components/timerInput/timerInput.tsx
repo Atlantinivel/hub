@@ -38,7 +38,7 @@ const timerSchema = z.object({
   duration: z.number().optional(),
   startTime: z.date(),
   endTime: z.date(),
-  isOOO: z.boolean()
+  isOOO: z.boolean(),
 });
 
 export type FormType = z.infer<typeof timerSchema>;
@@ -55,8 +55,6 @@ const TimerInput: FC<TimerInputProps> = ({
   const [departments, setDepartments] = useState([]);
   const [isOOO, setIsOOO] = useState(false);
 
-
-
   const form = useForm<FormType>({
     resolver: zodResolver(timerSchema),
     defaultValues: {
@@ -68,7 +66,7 @@ const TimerInput: FC<TimerInputProps> = ({
       duration: 0,
       startTime: new Date(),
       endTime: new Date(),
-      isOOO: false
+      isOOO: false,
     },
   });
 
@@ -85,7 +83,6 @@ const TimerInput: FC<TimerInputProps> = ({
       }));
     }
   }, [entry, form]);
-
 
   const onSubmit = async ({
     duration,
@@ -107,7 +104,6 @@ const TimerInput: FC<TimerInputProps> = ({
         },
       },
     );
-
 
     if (entry?.isEditing) {
       // @ts-ignore
@@ -152,21 +148,17 @@ const TimerInput: FC<TimerInputProps> = ({
   };
 
   const handleDepartmentChange = (departmentsState: any) => {
-
     setDepartments(departmentsState);
     const filteredListUsers = departmentsState?.map((id) => {
       const u = users.filter((user: any) => user.department == id);
       if (u.length > 0) {
         return u;
       }
-
-
     });
 
     const filteredUsers = filteredListUsers.filter((element: any) => {
       return element !== undefined;
     });
-
 
     if (filteredUsers.flat(1).length === 0) return;
 
@@ -217,17 +209,16 @@ const TimerInput: FC<TimerInputProps> = ({
           name="isOOO"
           render={({ field }) => (
             <>
-              <FormDescription>
-                Indisponível
-              </FormDescription>
+              <FormDescription>Indisponível</FormDescription>
               <Checkbox
                 checked={field.value}
                 onCheckedChange={(e) => {
-                  setIsOOO(!field.value)
-                  field.onChange(e)
+                  setIsOOO(!field.value);
+                  field.onChange(e);
                 }}
                 {...field}
-              /></>
+              />
+            </>
           )}
         />
 
@@ -260,7 +251,10 @@ const TimerInput: FC<TimerInputProps> = ({
               control={form.control}
               name="room"
               render={({ field }) => (
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <SelectTrigger className=" max-w-[210px]">
                     <SelectValue placeholder="Sala" />
                   </SelectTrigger>
@@ -274,17 +268,16 @@ const TimerInput: FC<TimerInputProps> = ({
                 </Select>
               )}
             />
-          </>)}
-
-
-
-
+          </>
+        )}
 
         <div className="flex flex-wrap items-center gap-4 ">
           <ManualMethod form={form} isOOO={isOOO} />
         </div>
         <div className="flex items-center gap-4">
-          <Button type="submit">{entry?.isEditing ? 'Gravar' : 'Adicionar'}</Button>
+          <Button type="submit">
+            {entry?.isEditing ? 'Gravar' : 'Adicionar'}
+          </Button>
           {entry?.isEditing && (
             <Button type="button" onClick={() => removeMeeting()}>
               {'Remover'}

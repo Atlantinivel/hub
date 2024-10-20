@@ -85,7 +85,6 @@ export function DataTable<TData, TValue>({
         <div className="flex items-center gap-2 py-4">
           <Input
             placeholder="Pesquisa..."
-
             value={filtering}
             onChange={(e) => setFiltering(e.target.value)}
             className="max-w-sm"
@@ -183,9 +182,9 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}

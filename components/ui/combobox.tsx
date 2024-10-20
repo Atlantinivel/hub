@@ -51,23 +51,21 @@ export function Combobox({
           </span>
         ));
       } else {
-        return <>{(value as string[]).slice(0, 2).map((selectedItem) => (
-          <span
-            className="mx-0.5 rounded-sm bg-accent p-1 text-xs"
-            key={selectedItem}
-          >
-            {items.find((item) => item.value === selectedItem)?.label}
-          </span>
-        ))}
-          <span
-            className="mx-0.5 rounded-sm bg-accent p-1 text-xs"
-
-          >
-            +{value.length - 2}
-          </span>
-
-        </>
-
+        return (
+          <>
+            {(value as string[]).slice(0, 2).map((selectedItem) => (
+              <span
+                className="mx-0.5 rounded-sm bg-accent p-1 text-xs"
+                key={selectedItem}
+              >
+                {items.find((item) => item.value === selectedItem)?.label}
+              </span>
+            ))}
+            <span className="mx-0.5 rounded-sm bg-accent p-1 text-xs">
+              +{value.length - 2}
+            </span>
+          </>
+        );
       }
     }
 

@@ -67,21 +67,26 @@ const ManualMethod: FC<ManualMethodProps> = ({ form, isOOO }) => {
 
   return (
     <>
-
-      {!isOOO &&
-        (<div className="flex items-center gap-1"> <FormField
-          control={form.control}
-          name="startTime"
-          render={({ field }) => (
-            <Input
-              name={field.name}
-              value={format(field.value, 'HH:mm')}
-              onChange={(e) => handleChangeTime(e, field.value, field.onChange)}
-              onBlur={() => handleOnBlur(field.value, form.getValues().endTime)}
-              type="time"
-            />
-          )}
-        />
+      {!isOOO && (
+        <div className="flex items-center gap-1">
+          {' '}
+          <FormField
+            control={form.control}
+            name="startTime"
+            render={({ field }) => (
+              <Input
+                name={field.name}
+                value={format(field.value, 'HH:mm')}
+                onChange={(e) =>
+                  handleChangeTime(e, field.value, field.onChange)
+                }
+                onBlur={() =>
+                  handleOnBlur(field.value, form.getValues().endTime)
+                }
+                type="time"
+              />
+            )}
+          />
           -
           <div className="relative">
             <FormField
@@ -113,7 +118,7 @@ const ManualMethod: FC<ManualMethodProps> = ({ form, isOOO }) => {
             />
           </div>
         </div>
-        )}
+      )}
 
       <FormField
         control={form.control}
