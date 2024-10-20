@@ -33,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import axios from 'axios';
 type PostTypo = Post & {
   author: User;
 };
@@ -68,15 +69,28 @@ export function Forum() {
     getPostsServerAction();
   }, [post]);
   const handleCreatePost = useCallback(async () => {
-    const request = await createPost({
+    const data = {
       departmentid: department,
       title: title,
       content: content,
       //@ts-expect-error
       userId: session?.user?.id,
+    };
+    const response = await axios.post(`/api/forum`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    setPost(request.data);
-    sendEmail(department as string, request.data.id as string);
+
+    // const request = await createPost({
+    //   departmentid: department,
+    //   title: title,
+    //   content: content,
+    //   //@ts-expect-error
+    //   userId: session?.user?.id,
+    // });
+    setPost(response.data);
+    sendEmail(department as string, response.data.id as string);
   }, [content, department, title]);
 
   const handleDepartmentChange = useCallback(

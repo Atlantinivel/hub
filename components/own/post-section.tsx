@@ -14,6 +14,7 @@ import CreateComment from './comments/create-comment';
 import PostComment from './comments/post-comment';
 import PostItem from './post/post';
 import PostCard from './post-card';
+import axios from 'axios';
 type PostTypo = Post & {
   author: User;
 };
@@ -39,20 +40,39 @@ const PostSection = ({ id }: PostSectionProps) => {
   }, [comment]);
   const handleCreateComment = useCallback(async () => {
     console.log('test handle comment');
-    const request = await createComment({
+    const data = {
       text: input,
       postId: post?.id as string,
       //@ts-expect-error
       userId: session?.user?.id,
+    };
+    const response = await axios.post(`/api/comment`, data, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
-    setComment(request.data);
+
+    // const request = await createComment({
+    //   text: input,
+    //   postId: post?.id as string,
+    //   //@ts-expect-error
+    //   userId: session?.user?.id,
+    // });
+    setComment(response.data);
     setInput('');
   }, [input, post?.id]);
 
   const getPostsServerAction = async (postid: string) => {
-    const postdata = await getPostById(postid);
-    console.log(postdata);
-    setPost(postdata);
+    fetch(`/api/forum/${postid}`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setPost(data);
+      });
+
+    // const postdata = await getPostById(postid);
+    // console.log(postdata);
+    // setPost(postdata);
   };
 
   return (
