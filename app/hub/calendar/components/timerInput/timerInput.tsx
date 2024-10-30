@@ -31,14 +31,14 @@ import departmentsList from '@/static-data/departments.json';
 
 const timerSchema = z.object({
   id: z.string().optional(),
-  description: z.string().min(2),
-  creatorId: z.string(),
+  description: z.string().min(2).optional(),
+  creatorId: z.string().optional(),
   guestsIds: z.array(z.string()).optional(),
   room: z.string().optional(),
   duration: z.number().optional(),
-  startTime: z.date(),
-  endTime: z.date(),
-  isOOO: z.boolean(),
+  startTime: z.date().optional(),
+  endTime: z.date().optional(),
+  isOOO: z.boolean().optional(),
 });
 
 export type FormType = z.infer<typeof timerSchema>;
@@ -89,6 +89,7 @@ const TimerInput: FC<TimerInputProps> = ({
     ...values
   }: z.infer<typeof timerSchema>) => {
     const endTime = values.endTime;
+    console.log('values', values);
 
     const result = await axios.post<EntryType>(
       `/api/meeting`,
@@ -222,6 +223,7 @@ const TimerInput: FC<TimerInputProps> = ({
             </>
           )}
         />
+
 
         {!isOOO && (
           <>

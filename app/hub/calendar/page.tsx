@@ -31,7 +31,7 @@ const Timer = async () => {
 
   const usersData = getUsers();
   //@ts-ignore
-  const meetingsData = getMeetings(session.token.id);
+  const meetingsData = getMeetings('65bd343d627409b6f55d4b1e');
   const [users, meetings] = await Promise.all([usersData, meetingsData]);
 
   return (
