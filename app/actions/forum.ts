@@ -4,7 +4,7 @@ import { Post } from '@prisma/client';
 
 import { getData, postData } from '@/lib/fetchFunctions';
 import { GenericObject } from '@/models/types';
-
+const baseUrl = process.env.NEXTAUTH_URL;
 export async function createPost(body: {
   departmentid?: string;
   title: string;
